@@ -1,0 +1,25 @@
+# Squadra Ubiquitous Language
+
+- **Athlete**: pessoa com perfil esportivo permanente.
+- **Team**: entidade permanente que agrupa atletas; não possui capitã permanente.
+- **Team Owner**: responsável administrativo permanente da equipe.
+- **Tournament**: evento esportivo principal.
+- **Category**: competição independente dentro de um torneio.
+- **Registration**: participação de uma equipe em uma categoria.
+- **Roster**: elenco inscrito naquela participação.
+- **Registration Staff**: papéis temporários da inscrição.
+- **Captain**: representante temporária da equipe na inscrição.
+- **Team Manager**: responsável operacional da inscrição.
+- **Stage**: fase competitiva.
+- **Round**: rodada dentro de uma fase.
+- **Match**: partida entre equipes.
+- **Standing**: classificação dentro de uma fase/grupo.
+- **Draw**: distribuição de equipes em grupos/chaves.
+- **Qualification**: progressão entre fases.
+- **Venue**: local físico do evento.
+- **Court**: quadra/campo dentro do venue.
+- **Schedule Slot**: janela disponível para partida.
+- **Scheduling Engine**: motor de horários/quadras.
+- **Competition Engine**: motor competitivo.
+- **Badge**: conquista oficial de atleta/equipe.
+- **Contextual Role**: papel válido apenas em um recurso específico.
