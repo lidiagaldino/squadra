@@ -15,14 +15,15 @@ export function TeamShell({ children }: Readonly<{ children: React.ReactNode }>)
 
   return (
     <main className="home-shell team-app-shell">
-      <aside className="home-rail" aria-label="Squadra navigation">
-        <Link className="brand-mark" href="/home" aria-label="Squadra Home">S</Link>
+      <aside className="home-rail" aria-label="Navegação do Squadra">
+        <Link className="brand-mark" href="/home" aria-label="Início do Squadra">S</Link>
         <nav>
-          <Link href="/home">Home</Link>
-          <Link href={user?.role === "ORGANIZER" ? "/organizer/profile" : "/athlete/profile"}>Profile</Link>
-          <Link aria-current="page" href="/teams">Teams</Link>
+          <Link href="/home">Início</Link>
+          <Link href={user?.role === "ORGANIZER" ? "/organizer/profile" : "/athlete/profile"}>Perfil</Link>
+          <Link aria-current="page" href="/teams">Times</Link>
+          {user?.role === "ORGANIZER" && <Link href="/tournaments">Torneios</Link>}
         </nav>
-        <button className="text-button" onClick={() => void signOut()}>Sign out</button>
+        <button className="text-button" onClick={() => void signOut()}>Sair</button>
       </aside>
       <section className="home-content team-content">{children}</section>
     </main>

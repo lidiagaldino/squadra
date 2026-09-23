@@ -46,12 +46,10 @@ export class TeamsApiError extends Error {
 }
 
 type AuthSession = {
-  accessToken: string | null;
-  refresh(): Promise<string>;
+  refresh(): Promise<unknown>;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
-const teamsUrl = `${apiBaseUrl}/api/v1/teams`;
+const teamsUrl = "/api/teams";
 
 export const teamsApi = {
   list: (auth: AuthSession) => authorizedRequest<TeamSummary[]>(auth, "", "GET"),
@@ -76,29 +74,25 @@ export const teamsApi = {
 };
 
 async function authorizedRequest<T>(auth: AuthSession, path: string, method: string, body?: unknown): Promise<T> {
-  let token = auth.accessToken ?? await auth.refresh();
-  let response = await request(path, method, token, body);
+  let response = await request(path, method, body);
 
   if (response.status === 401) {
-    token = await auth.refresh();
-    response = await request(path, method, token, body);
+    await auth.refresh();
+    response = await request(path, method, body);
   }
 
   if (!response.ok) {
-    throw new TeamsApiError("We could not update team management. Please try again.", response.status);
+    throw new TeamsApiError("Não foi possível atualizar a gestão do time. Tente novamente.", response.status);
   }
 
   return response.status === 204 ? (undefined as T) : (response.json() as Promise<T>);
 }
 
-function request(path: string, method: string, accessToken: string, body?: unknown) {
+function request(path: string, method: string, body?: unknown) {
   return fetch(`${teamsUrl}${path}`, {
     method,
     credentials: "include",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      ...(body ? { "Content-Type": "application/json" } : {}),
-    },
+    headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
 }

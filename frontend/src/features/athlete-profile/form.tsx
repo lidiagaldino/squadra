@@ -12,22 +12,22 @@ const positions = ["GOALKEEPER", "DEFENDER", "MIDFIELDER", "FORWARD"] as const;
 const feet = ["", "LEFT", "RIGHT", "BOTH"] as const;
 
 const profileSchema = z.object({
-  displayName: z.string().trim().min(2, "Use at least 2 characters.").max(60, "Use at most 60 characters."),
-  fullName: z.string().trim().max(120, "Use at most 120 characters.").optional(),
+  displayName: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(60, "Use no máximo 60 caracteres."),
+  fullName: z.string().trim().max(120, "Use no máximo 120 caracteres.").optional(),
   birthDate: z.string().optional(),
   primaryPosition: z.enum(positions),
   secondaryPositions: z.array(z.enum(positions)),
   dominantFoot: z.enum(feet).optional(),
-  jerseyNumber: z.coerce.number().int().min(1, "Use a number from 1 to 99.").max(99, "Use a number from 1 to 99.").optional().or(z.literal("")),
-  city: z.string().trim().max(80, "Use at most 80 characters.").optional(),
-  state: z.string().trim().max(80, "Use at most 80 characters.").optional(),
-  bio: z.string().trim().max(280, "Use at most 280 characters.").optional(),
+  jerseyNumber: z.coerce.number().int().min(1, "Use um número de 1 a 99.").max(99, "Use um número de 1 a 99.").optional().or(z.literal("")),
+  city: z.string().trim().max(80, "Use no máximo 80 caracteres.").optional(),
+  state: z.string().trim().max(80, "Use no máximo 80 caracteres.").optional(),
+  bio: z.string().trim().max(280, "Use no máximo 280 caracteres.").optional(),
 }).superRefine((value, context) => {
   if (value.birthDate && new Date(value.birthDate) > new Date()) {
-    context.addIssue({ code: z.ZodIssueCode.custom, path: ["birthDate"], message: "Birth date cannot be in the future." });
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["birthDate"], message: "A data de nascimento não pode estar no futuro." });
   }
   if (value.secondaryPositions.includes(value.primaryPosition)) {
-    context.addIssue({ code: z.ZodIssueCode.custom, path: ["secondaryPositions"], message: "Secondary positions cannot include your main position." });
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["secondaryPositions"], message: "As posições secundárias não podem incluir sua posição principal." });
   }
 });
 
@@ -71,13 +71,13 @@ export function AthleteProfileForm() {
     mutationFn: (values: AthleteProfileInput) => athleteProfileApi.saveProfile(auth, values),
     onSuccess: (profile) => {
       setError(null);
-      setStatus("Profile saved.");
+      setStatus("Perfil salvo.");
       queryClient.setQueryData(["athlete-profile"], profile);
       form.reset(valuesFromProfile(profile));
     },
     onError: () => {
       setStatus(null);
-      setError("We could not save your athlete profile. Please try again.");
+      setError("Não foi possível salvar seu perfil de atleta. Tente novamente.");
     },
   });
 
@@ -91,38 +91,38 @@ export function AthleteProfileForm() {
     <section className="profile-shell" aria-labelledby="athlete-profile-title">
       <div className="profile-hero">
         <div>
-          <p className="eyebrow">Athlete profile</p>
-          <h1 id="athlete-profile-title">Build your player identity.</h1>
-          <p>Keep your position, shirt number and story ready for teams, tournaments and the next match.</p>
+          <p className="eyebrow">Perfil da atleta</p>
+          <h1 id="athlete-profile-title">Construa sua identidade em campo.</h1>
+          <p>Mantenha posição, número da camisa e história prontos para times, torneios e o próximo jogo.</p>
         </div>
-        <div className="profile-kit" aria-label="Profile kit preview">
-          <span>{preview.displayName.trim() || "Squadra athlete"}</span>
+        <div className="profile-kit" aria-label="Prévia do perfil">
+          <span>{preview.displayName.trim() || "Atleta Squadra"}</span>
           <strong>{preview.jerseyNumber ? `#${preview.jerseyNumber}` : "--"}</strong>
           <small>{profileKitSummary(preview)}</small>
         </div>
       </div>
 
       <div className="profile-status-strip">
-        {query.isPending && <p role="status">Loading your profile…</p>}
-        {query.isError && <p className="form-error" role="alert">We could not load your athlete profile.</p>}
-        {query.data === null && <p role="status">Create your athlete profile before joining the next match.</p>}
+        {query.isPending && <p role="status">Carregando seu perfil…</p>}
+        {query.isError && <p className="form-error" role="alert">Não foi possível carregar seu perfil de atleta.</p>}
+        {query.data === null && <p role="status">Crie seu perfil de atleta antes de entrar no próximo jogo.</p>}
       </div>
 
       <form className="profile-form" onSubmit={submit} noValidate>
         <div className="profile-form-main">
           <section className="profile-section" aria-labelledby="identity-section">
             <div className="section-heading">
-              <p className="eyebrow">Identity</p>
-              <h2 id="identity-section">How teams see you</h2>
+              <p className="eyebrow">Identidade</p>
+              <h2 id="identity-section">Como os times veem você</h2>
             </div>
             <div className="field-grid">
-              <Field label="Display name" error={form.formState.errors.displayName?.message}>
+              <Field label="Nome de exibição" error={form.formState.errors.displayName?.message}>
                 <input autoComplete="nickname" {...form.register("displayName")} />
               </Field>
-              <Field label="Full name" error={form.formState.errors.fullName?.message}>
+              <Field label="Nome completo" error={form.formState.errors.fullName?.message}>
                 <input autoComplete="name" {...form.register("fullName")} />
               </Field>
-              <Field label="Birth date" error={form.formState.errors.birthDate?.message}>
+              <Field label="Data de nascimento" error={form.formState.errors.birthDate?.message}>
                 <input type="date" {...form.register("birthDate")} />
               </Field>
             </div>
@@ -130,22 +130,22 @@ export function AthleteProfileForm() {
 
           <section className="profile-section" aria-labelledby="football-section">
             <div className="section-heading">
-              <p className="eyebrow">Football</p>
-              <h2 id="football-section">Your role on the pitch</h2>
+              <p className="eyebrow">Futebol</p>
+              <h2 id="football-section">Seu papel em campo</h2>
             </div>
             <div className="field-grid">
-              <Field label="Main position" error={form.formState.errors.primaryPosition?.message}>
+              <Field label="Posição principal" error={form.formState.errors.primaryPosition?.message}>
                 <select {...form.register("primaryPosition")}>{positions.map((position) => <option key={position} value={position}>{label(position)}</option>)}</select>
               </Field>
-              <Field label="Dominant foot" error={form.formState.errors.dominantFoot?.message}>
-                <select {...form.register("dominantFoot")}>{feet.map((foot) => <option key={foot || "empty"} value={foot}>{foot ? label(foot) : "Prefer not to say"}</option>)}</select>
+              <Field label="Pé dominante" error={form.formState.errors.dominantFoot?.message}>
+                <select {...form.register("dominantFoot")}>{feet.map((foot) => <option key={foot || "empty"} value={foot}>{foot ? label(foot) : "Prefiro não informar"}</option>)}</select>
               </Field>
-              <Field label="Jersey number" error={form.formState.errors.jerseyNumber?.message?.toString()}>
+              <Field label="Número da camisa" error={form.formState.errors.jerseyNumber?.message?.toString()}>
                 <input type="number" min="1" max="99" {...form.register("jerseyNumber")} />
               </Field>
             </div>
             <fieldset className="field position-fieldset">
-              <legend>Secondary positions</legend>
+              <legend>Posições secundárias</legend>
               <div className="position-options">
                 {positions.map((position) => (
                   <label className="checkbox-field" key={position}>
@@ -160,14 +160,14 @@ export function AthleteProfileForm() {
 
           <section className="profile-section" aria-labelledby="story-section">
             <div className="section-heading">
-              <p className="eyebrow">Story</p>
-              <h2 id="story-section">Where you play from</h2>
+              <p className="eyebrow">História</p>
+              <h2 id="story-section">De onde vem seu jogo</h2>
             </div>
             <div className="field-grid">
-              <Field label="City" error={form.formState.errors.city?.message}>
+              <Field label="Cidade" error={form.formState.errors.city?.message}>
                 <input autoComplete="address-level2" {...form.register("city")} />
               </Field>
-              <Field label="State" error={form.formState.errors.state?.message}>
+              <Field label="Estado" error={form.formState.errors.state?.message}>
                 <input autoComplete="address-level1" {...form.register("state")} />
               </Field>
             </div>
@@ -177,17 +177,17 @@ export function AthleteProfileForm() {
           </section>
         </div>
 
-        <aside className="profile-aside" aria-label="Profile completion">
-          <p className="eyebrow">Ready for kickoff</p>
-          <h2>Complete profiles help organizers and teams recognize you faster.</h2>
+        <aside className="profile-aside" aria-label="Conclusão do perfil">
+          <p className="eyebrow">Pronta para o apito inicial</p>
+          <h2>Perfis completos ajudam organizadoras e times a reconhecer você mais rápido.</h2>
           <ul>
-            <li>Position and foot support team planning.</li>
-            <li>City and bio make your sports history easier to follow.</li>
-            <li>Your profile stays editable as your game evolves.</li>
+            <li>Posição e pé dominante apoiam o planejamento do time.</li>
+            <li>Cidade e bio deixam sua história esportiva mais fácil de acompanhar.</li>
+            <li>Seu perfil continua editável conforme seu jogo evolui.</li>
           </ul>
           {error && <p className="form-error" role="alert">{error}</p>}
           {status && <p role="status">{status}</p>}
-          <button disabled={mutation.isPending}>{mutation.isPending ? "Saving…" : "Save profile"}</button>
+          <button disabled={mutation.isPending}>{mutation.isPending ? "Salvando…" : "Salvar perfil"}</button>
         </aside>
       </form>
     </section>
@@ -223,11 +223,20 @@ function toInput(values: ProfileFormValues): AthleteProfileInput {
 }
 
 function label(value: string) {
-  return value.toLowerCase().replaceAll("_", " ").replace(/^\w/, (first) => first.toUpperCase());
+  const labels: Record<string, string> = {
+    GOALKEEPER: "Goleira",
+    DEFENDER: "Defensora",
+    MIDFIELDER: "Meio-campista",
+    FORWARD: "Atacante",
+    LEFT: "Esquerdo",
+    RIGHT: "Direito",
+    BOTH: "Ambos",
+  };
+  return labels[value] ?? value.toLowerCase().replaceAll("_", " ").replace(/^\w/, (first) => first.toUpperCase());
 }
 
 function profileKitSummary(values: ProfileFormValues) {
   const position = label(values.primaryPosition);
-  const foot = values.dominantFoot === "BOTH" ? "Both feet" : values.dominantFoot ? `${label(values.dominantFoot)} foot` : "Foot not set";
+  const foot = values.dominantFoot === "BOTH" ? "Ambos os pés" : values.dominantFoot ? `Pé ${label(values.dominantFoot).toLowerCase()}` : "Pé não informado";
   return `${position} • ${foot}`;
 }

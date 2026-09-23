@@ -10,11 +10,11 @@ import { teamsApi, type TeamInput, type TeamSummary } from "./api";
 import { TeamShell } from "./team-shell";
 
 const teamSchema = z.object({
-  name: z.string().trim().min(2, "Use at least 2 characters.").max(100, "Use at most 100 characters."),
-  city: z.string().trim().max(80, "Use at most 80 characters.").optional(),
-  state: z.string().trim().max(80, "Use at most 80 characters.").optional(),
+  name: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(100, "Use no máximo 100 caracteres."),
+  city: z.string().trim().max(80, "Use no máximo 80 caracteres.").optional(),
+  state: z.string().trim().max(80, "Use no máximo 80 caracteres.").optional(),
   foundedYear: z.coerce.number().int().min(1850).max(new Date().getFullYear()).optional().or(z.literal("")),
-  description: z.string().trim().max(500, "Use at most 500 characters.").optional(),
+  description: z.string().trim().max(500, "Use no máximo 500 caracteres.").optional(),
 });
 
 type TeamFormValues = z.infer<typeof teamSchema>;
@@ -41,21 +41,21 @@ export function TeamListScreen() {
     <TeamShell>
       <header className="team-hero">
         <div>
-          <p className="eyebrow">Teams</p>
-          <h1>Your squad context.</h1>
-          <p>Create a permanent team, review invitations, and keep the roster ready before tournament registration.</p>
+          <p className="eyebrow">Times</p>
+          <h1>Meus Times</h1>
+          <p>Gerencie elencos, aceite convites ou crie um novo clube.</p>
         </div>
-        <div className="team-stat" aria-label="Team count"><strong>{teams.length}</strong><span>{teams.length === 1 ? "team" : "teams"}</span></div>
+        <div className="team-stat" aria-label="Quantidade de times"><strong>{teams.length}</strong><span>{teams.length === 1 ? "time" : "times"}</span></div>
       </header>
 
-      <section className="team-board" aria-label="Team management">
+      <section className="team-board" aria-label="Gestão de times">
         <div className="team-list-column">
           <div className="section-heading">
-            <p className="eyebrow">My teams</p>
-            <h2>Choose a team</h2>
+            <p className="eyebrow">Elencos ativos</p>
+            <h2>Escolha um time</h2>
           </div>
-          {teamsQuery.isPending && <p role="status">Loading teams...</p>}
-          {teamsQuery.isError && <p className="form-error" role="alert">We could not load your teams.</p>}
+          {teamsQuery.isPending && <p role="status">Carregando times...</p>}
+          {teamsQuery.isError && <p className="form-error" role="alert">Não foi possível carregar seus times.</p>}
           {!teamsQuery.isPending && teams.length === 0 && <EmptyTeams />}
           <div className="team-card-list">
             {teams.map((team) => <TeamCard key={team.id} team={team} />)}
@@ -64,18 +64,18 @@ export function TeamListScreen() {
 
         <form className="team-create-panel" onSubmit={submit} noValidate>
           <div>
-            <p className="eyebrow">Create</p>
-            <h2>Start a permanent team</h2>
+            <p className="eyebrow">Criar</p>
+            <h2>Criar Novo Time</h2>
           </div>
-          <Field label="Team name" error={form.formState.errors.name?.message}><input {...form.register("name")} /></Field>
+          <Field label="Nome do time" error={form.formState.errors.name?.message}><input {...form.register("name")} /></Field>
           <div className="field-grid">
-            <Field label="City" error={form.formState.errors.city?.message}><input {...form.register("city")} /></Field>
-            <Field label="State" error={form.formState.errors.state?.message}><input {...form.register("state")} /></Field>
-            <Field label="Founded year" error={form.formState.errors.foundedYear?.message?.toString()}><input type="number" {...form.register("foundedYear")} /></Field>
+            <Field label="Cidade" error={form.formState.errors.city?.message}><input {...form.register("city")} /></Field>
+            <Field label="Estado" error={form.formState.errors.state?.message}><input {...form.register("state")} /></Field>
+            <Field label="Ano de fundação" error={form.formState.errors.foundedYear?.message?.toString()}><input type="number" {...form.register("foundedYear")} /></Field>
           </div>
-          <Field label="Team story" error={form.formState.errors.description?.message}><textarea rows={4} {...form.register("description")} /></Field>
-          {createTeam.isError && <p className="form-error" role="alert">We could not create the team.</p>}
-          <button disabled={createTeam.isPending}>{createTeam.isPending ? "Creating..." : "Create team"}</button>
+          <Field label="História do time" error={form.formState.errors.description?.message}><textarea rows={4} {...form.register("description")} /></Field>
+          {createTeam.isError && <p className="form-error" role="alert">Não foi possível criar o time.</p>}
+          <button disabled={createTeam.isPending}>{createTeam.isPending ? "Criando..." : "Criar time"}</button>
         </form>
       </section>
     </TeamShell>
@@ -88,7 +88,7 @@ function TeamCard({ team }: Readonly<{ team: TeamSummary }>) {
       <span className="team-card-mark">{team.name.slice(0, 1).toUpperCase()}</span>
       <div>
         <h3>{team.name}</h3>
-        <p>{[team.city, team.state].filter(Boolean).join(", ") || "Location not set"}</p>
+        <p>{[team.city, team.state].filter(Boolean).join(", ") || "Localização não informada"}</p>
         <div className="role-row">
           {team.administrationRole && <span>{label(team.administrationRole)}</span>}
           {team.athleteMembershipStatus && <span>{label(team.athleteMembershipStatus)}</span>}
@@ -99,7 +99,7 @@ function TeamCard({ team }: Readonly<{ team: TeamSummary }>) {
 }
 
 function EmptyTeams() {
-  return <div className="empty-team-state"><h3>No teams yet</h3><p>Create one, or respond to invitations when they arrive.</p></div>;
+  return <div className="empty-team-state"><h3>Nenhum elenco ativo ainda</h3><p>Crie um novo time ou aceite convites quando eles chegarem.</p></div>;
 }
 
 function Field({ label: fieldLabel, error, children }: Readonly<{ label: string; error?: string; children: React.ReactNode }>) {
@@ -107,5 +107,11 @@ function Field({ label: fieldLabel, error, children }: Readonly<{ label: string;
 }
 
 function label(value: string) {
-  return value.toLowerCase().replaceAll("_", " ").replace(/^\w/, (letter) => letter.toUpperCase());
+  const labels: Record<string, string> = {
+    TEAM_OWNER: "Dona do time",
+    TEAM_ADMIN: "Admin do time",
+    INVITED: "Convidada",
+    ACTIVE: "Ativa",
+  };
+  return labels[value] ?? value.toLowerCase().replaceAll("_", " ").replace(/^\w/, (letter) => letter.toUpperCase());
 }

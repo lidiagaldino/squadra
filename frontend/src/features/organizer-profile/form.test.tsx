@@ -25,7 +25,7 @@ describe("OrganizerProfileForm", () => {
 
     renderProfileForm();
 
-    expect(await screen.findByText(/create your organization profile/i)).toBeInTheDocument();
+    expect(await screen.findByText(/crie o perfil da organização/i)).toBeInTheDocument();
   });
 
   it("loads existing values and saves edits without reloading the page", async () => {
@@ -35,11 +35,11 @@ describe("OrganizerProfileForm", () => {
     renderProfileForm();
 
     expect(await screen.findByDisplayValue("Liga Miga")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Organization name"), { target: { value: "Copa Minas" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save organization" }));
+    fireEvent.change(screen.getByLabelText("Nome da organização"), { target: { value: "Copa Minas" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar organização" }));
 
     await waitFor(() => expect(api.saveProfile).toHaveBeenCalledWith(auth, expect.objectContaining({ organizationName: "Copa Minas" })));
-    expect(await screen.findByRole("status", { name: "" })).toHaveTextContent("Organization profile saved.");
+    expect(await screen.findByRole("status", { name: "" })).toHaveTextContent("Perfil da organização salvo.");
   });
 
   it("updates the organization preview from loaded and edited profile values", async () => {
@@ -51,10 +51,10 @@ describe("OrganizerProfileForm", () => {
     expect(screen.getByText("Sao Paulo, SP")).toBeInTheDocument();
     expect(screen.getByText("contato@ligamiga.test")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("Organization name"), { target: { value: "Copa Minas" } });
-    fireEvent.change(screen.getByLabelText("City"), { target: { value: "Belo Horizonte" } });
-    fireEvent.change(screen.getByLabelText("State"), { target: { value: "MG" } });
-    fireEvent.change(screen.getByLabelText("Contact email"), { target: { value: "info@copaminas.test" } });
+    fireEvent.change(screen.getByLabelText("Nome da organização"), { target: { value: "Copa Minas" } });
+    fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Belo Horizonte" } });
+    fireEvent.change(screen.getByLabelText("Estado"), { target: { value: "MG" } });
+    fireEvent.change(screen.getByLabelText("E-mail de contato"), { target: { value: "info@copaminas.test" } });
 
     expect(screen.getByText("Copa Minas")).toBeInTheDocument();
     expect(screen.getByText("Belo Horizonte, MG")).toBeInTheDocument();
@@ -79,8 +79,8 @@ describe("OrganizerProfileForm", () => {
     renderProfileForm();
 
     expect(await screen.findByDisplayValue("Liga Miga")).toBeInTheDocument();
-    expect(screen.getByLabelText("Phone")).toHaveValue("");
-    expect(screen.getByLabelText("Website")).toHaveValue("");
+    expect(screen.getByLabelText("Telefone")).toHaveValue("");
+    expect(screen.getByLabelText("Site")).toHaveValue("");
   });
 
   it("validates profile values before saving", async () => {
@@ -89,10 +89,10 @@ describe("OrganizerProfileForm", () => {
     renderProfileForm();
 
     fillRequiredFields();
-    fireEvent.change(screen.getByLabelText("Organization name"), { target: { value: "L" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save organization" }));
+    fireEvent.change(screen.getByLabelText("Nome da organização"), { target: { value: "L" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar organização" }));
 
-    expect(await screen.findByText("Use at least 2 characters.")).toBeInTheDocument();
+    expect(await screen.findByText("Use pelo menos 2 caracteres.")).toBeInTheDocument();
     expect(api.saveProfile).not.toHaveBeenCalled();
   });
 
@@ -102,12 +102,12 @@ describe("OrganizerProfileForm", () => {
     renderProfileForm();
 
     fillRequiredFields();
-    fireEvent.change(screen.getByLabelText("Contact email"), { target: { value: "not-an-email" } });
-    fireEvent.change(screen.getByLabelText("Website"), { target: { value: "ftp://ligamiga.test" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save organization" }));
+    fireEvent.change(screen.getByLabelText("E-mail de contato"), { target: { value: "not-an-email" } });
+    fireEvent.change(screen.getByLabelText("Site"), { target: { value: "ftp://ligamiga.test" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar organização" }));
 
-    expect(await screen.findByText("Enter a valid email address.")).toBeInTheDocument();
-    expect(screen.getByText("Use an http:// or https:// website.")).toBeInTheDocument();
+    expect(await screen.findByText("Informe um e-mail válido.")).toBeInTheDocument();
+    expect(screen.getByText("Use um site com http:// ou https://.")).toBeInTheDocument();
     expect(api.saveProfile).not.toHaveBeenCalled();
   });
 
@@ -116,7 +116,7 @@ describe("OrganizerProfileForm", () => {
 
     renderProfileForm();
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("We could not load your organization profile.");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível carregar o perfil da organização.");
   });
 
   it("keeps typed values when saving fails", async () => {
@@ -126,9 +126,9 @@ describe("OrganizerProfileForm", () => {
     renderProfileForm();
 
     fillRequiredFields();
-    fireEvent.click(screen.getByRole("button", { name: "Save organization" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar organização" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("We could not save your organization profile.");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível salvar o perfil da organização.");
     expect(screen.getByDisplayValue("Liga Miga")).toBeInTheDocument();
   });
 
@@ -138,11 +138,11 @@ describe("OrganizerProfileForm", () => {
   }
 
   function fillRequiredFields() {
-    fireEvent.change(screen.getByLabelText("Organization name"), { target: { value: "Liga Miga" } });
-    fireEvent.change(screen.getByLabelText("Contact name"), { target: { value: "Ana Silva" } });
-    fireEvent.change(screen.getByLabelText("Contact email"), { target: { value: "contato@ligamiga.test" } });
-    fireEvent.change(screen.getByLabelText("City"), { target: { value: "Sao Paulo" } });
-    fireEvent.change(screen.getByLabelText("State"), { target: { value: "SP" } });
+    fireEvent.change(screen.getByLabelText("Nome da organização"), { target: { value: "Liga Miga" } });
+    fireEvent.change(screen.getByLabelText("Nome de contato"), { target: { value: "Ana Silva" } });
+    fireEvent.change(screen.getByLabelText("E-mail de contato"), { target: { value: "contato@ligamiga.test" } });
+    fireEvent.change(screen.getByLabelText("Cidade"), { target: { value: "Sao Paulo" } });
+    fireEvent.change(screen.getByLabelText("Estado"), { target: { value: "SP" } });
   }
 
   function profile(organizationName: string) {

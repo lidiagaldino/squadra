@@ -1,20 +1,27 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider, useAuth } from "./auth-context";
 
-const api = vi.hoisted(() => ({ login: vi.fn(), refresh: vi.fn(), logout: vi.fn() }));
+const nextAuth = vi.hoisted(() => ({ signIn: vi.fn(), signOut: vi.fn(), useSession: vi.fn() }));
 
-vi.mock("./api", () => ({ authApi: api }));
+vi.mock("next-auth/react", () => nextAuth);
 
 function SessionControls() {
-  const { accessToken, user, login, refresh, logout } = useAuth();
+  const { user, login, refresh, logout } = useAuth();
   return <>
-    <output>{accessToken ?? "signed-out"}</output>
     <output>{user ? `${user.email}:${user.role}` : "anonymous"}</output>
     <button onClick={() => void login("athlete@squadra.test", "a safe password")}>login</button>
     <button onClick={() => void refresh()}>refresh</button>
     <button onClick={() => void logout().catch(() => undefined)}>logout</button>
   </>;
+}
+
+function LoginFailureProbe() {
+  const { login } = useAuth();
+  return <button onClick={() => void login("athlete@squadra.test", "bad").catch((error) => {
+    document.body.dataset.loginError = error instanceof Error ? error.message : "unknown";
+  })}>login failure</button>;
 }
 
 function InvalidConsumer() {
@@ -23,33 +30,57 @@ function InvalidConsumer() {
 }
 
 describe("AuthProvider", () => {
-  beforeEach(() => Object.values(api).forEach((mock) => mock.mockReset()));
+  beforeEach(() => {
+    delete document.body.dataset.loginError;
+    Object.values(nextAuth).forEach((mock) => mock.mockReset());
+    nextAuth.useSession.mockReturnValue({ data: null, update: vi.fn() });
+  });
   afterEach(cleanup);
 
-  it("keeps login and refreshed access tokens in memory", async () => {
-    api.login.mockResolvedValue({ accessToken: tokenFor("athlete@squadra.test", "ATHLETE") });
-    api.refresh.mockResolvedValue({ accessToken: tokenFor("organizer@squadra.test", "ORGANIZER") });
-    render(<AuthProvider><SessionControls /></AuthProvider>);
+  it("uses NextAuth sign-in and exposes only session identity", async () => {
+    const update = vi.fn().mockResolvedValue({ user: { id: "user-2", email: "organizer@squadra.test", role: "ORGANIZER" } });
+    nextAuth.useSession
+      .mockReturnValueOnce({ data: { user: { id: "user-1", email: "athlete@squadra.test", role: "ATHLETE" } }, update })
+      .mockReturnValue({ data: { user: { id: "user-1", email: "athlete@squadra.test", role: "ATHLETE" } }, update });
+    nextAuth.signIn.mockResolvedValue({ ok: true });
+
+    renderWithClient(<AuthProvider><SessionControls /></AuthProvider>);
+
+    expect(screen.getByText("athlete@squadra.test:ATHLETE")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "login" }));
-    await waitFor(() => expect(screen.getByText("athlete@squadra.test:ATHLETE")).toBeInTheDocument());
+    await waitFor(() => expect(nextAuth.signIn).toHaveBeenCalledWith("credentials", {
+      email: "athlete@squadra.test",
+      password: "a safe password",
+      redirect: false,
+    }));
 
     fireEvent.click(screen.getByRole("button", { name: "refresh" }));
-    await waitFor(() => expect(screen.getByText("organizer@squadra.test:ORGANIZER")).toBeInTheDocument());
+    await waitFor(() => expect(update).toHaveBeenCalled());
   });
 
-  it("clears the in-memory token even if remote logout fails", async () => {
-    api.login.mockResolvedValue({ accessToken: tokenFor("athlete@squadra.test", "ATHLETE") });
-    api.logout.mockRejectedValue(new Error("network unavailable"));
-    render(<AuthProvider><SessionControls /></AuthProvider>);
+  it("throws on failed sign-in", async () => {
+    nextAuth.signIn.mockResolvedValue({ ok: false });
+    renderWithClient(<AuthProvider><LoginFailureProbe /></AuthProvider>);
 
-    fireEvent.click(screen.getByRole("button", { name: "login" }));
-    await waitFor(() => expect(screen.getByText("athlete@squadra.test:ATHLETE")).toBeInTheDocument());
+    fireEvent.click(screen.getByRole("button", { name: "login failure" }));
+    await waitFor(() => expect(nextAuth.signIn).toHaveBeenCalled());
+    await waitFor(() => expect(document.body.dataset.loginError).toBe("Falha na autenticação."));
+  });
+
+  it("clears user cache on logout", async () => {
+    nextAuth.useSession.mockReturnValue({
+      data: { user: { id: "user-1", email: "athlete@squadra.test", role: "ATHLETE" } },
+      update: vi.fn(),
+    });
+    nextAuth.signOut.mockResolvedValue(undefined);
+    const queryClient = new QueryClient();
+    queryClient.setQueryData(["teams"], [{ id: "team-1" }]);
+    render(<QueryClientProvider client={queryClient}><AuthProvider><SessionControls /></AuthProvider></QueryClientProvider>);
 
     fireEvent.click(screen.getByRole("button", { name: "logout" }));
-    await waitFor(() => expect(screen.getByText("signed-out")).toBeInTheDocument());
-    expect(screen.getByText("anonymous")).toBeInTheDocument();
-    expect(api.logout).toHaveBeenCalledOnce();
+    await waitFor(() => expect(nextAuth.signOut).toHaveBeenCalledWith({ redirect: false }));
+    expect(queryClient.getQueryCache().getAll()).toHaveLength(0);
   });
 
   it("rejects auth consumers outside its provider", () => {
@@ -57,7 +88,7 @@ describe("AuthProvider", () => {
   });
 });
 
-function tokenFor(email: string, role: "ATHLETE" | "ORGANIZER") {
-  const payload = btoa(JSON.stringify({ sub: "user-1", email, role })).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  return `header.${payload}.signature`;
+function renderWithClient(children: React.ReactElement) {
+  const queryClient = new QueryClient();
+  render(<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>);
 }

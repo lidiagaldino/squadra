@@ -24,8 +24,8 @@ describe("AthleteProfilePage", () => {
 
   it("renders the athlete profile form", () => {
     render(<AthleteProfilePage />);
-    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/home");
-    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Início" })).toHaveAttribute("href", "/home");
+    expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByText("athlete profile form")).toBeInTheDocument();
   });
 
@@ -33,7 +33,7 @@ describe("AthleteProfilePage", () => {
     logout.mockResolvedValue(undefined);
     render(<AthleteProfilePage />);
 
-    fireEvent.click(screen.getByRole("button", { name: /sign out/i }));
+    fireEvent.click(screen.getByRole("button", { name: /sair/i }));
 
     await waitFor(() => expect(logout).toHaveBeenCalledOnce());
     expect(push).toHaveBeenCalledWith("/login");

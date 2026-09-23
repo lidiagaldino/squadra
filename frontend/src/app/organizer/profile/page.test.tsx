@@ -24,9 +24,10 @@ describe("OrganizerProfilePage", () => {
 
   it("renders the organizer profile form inside the app shell", () => {
     render(<OrganizerProfilePage />);
-    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/home");
-    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("href", "/organizer/profile");
-    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Início" })).toHaveAttribute("href", "/home");
+    expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("href", "/organizer/profile");
+    expect(screen.getByRole("link", { name: "Torneios" })).toHaveAttribute("href", "/tournaments");
+    expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByText("organizer profile form")).toBeInTheDocument();
   });
 
@@ -34,7 +35,7 @@ describe("OrganizerProfilePage", () => {
     logout.mockResolvedValue(undefined);
     render(<OrganizerProfilePage />);
 
-    fireEvent.click(screen.getByRole("button", { name: /sign out/i }));
+    fireEvent.click(screen.getByRole("button", { name: /sair/i }));
 
     await waitFor(() => expect(logout).toHaveBeenCalledOnce());
     expect(push).toHaveBeenCalledWith("/login");

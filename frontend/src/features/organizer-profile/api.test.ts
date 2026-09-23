@@ -3,7 +3,7 @@ import { organizerProfileApi, OrganizerProfileApiError } from "./api";
 
 describe("organizerProfileApi", () => {
   const fetchMock = vi.fn();
-  const auth = { accessToken: "expired", refresh: vi.fn() };
+  const auth = { refresh: vi.fn() };
 
   beforeEach(() => {
     fetchMock.mockReset();
@@ -11,15 +11,14 @@ describe("organizerProfileApi", () => {
     vi.stubGlobal("fetch", fetchMock);
   });
 
-  it("loads the authenticated organizer profile with the access token", async () => {
+  it("loads the authenticated organizer profile through the BFF", async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify(profile()), { status: 200 }));
 
     await expect(organizerProfileApi.getProfile(auth)).resolves.toMatchObject({ organizationName: "Liga Miga" });
 
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/organizers/me/profile", expect.objectContaining({
+    expect(fetchMock).toHaveBeenCalledWith("/api/organizers/me/profile", expect.objectContaining({
       method: "GET",
       credentials: "include",
-      headers: expect.objectContaining({ Authorization: "Bearer expired" }),
     }));
   });
 
@@ -27,17 +26,6 @@ describe("organizerProfileApi", () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({ code: "ORGANIZER_PROFILE_NOT_FOUND" }), { status: 404 }));
 
     await expect(organizerProfileApi.getProfile(auth)).resolves.toBeNull();
-  });
-
-  it("refreshes before loading when no access token is in memory", async () => {
-    fetchMock.mockResolvedValue(new Response(JSON.stringify(profile()), { status: 200 }));
-
-    await expect(organizerProfileApi.getProfile({ accessToken: null, refresh: auth.refresh })).resolves.toMatchObject({ organizationName: "Liga Miga" });
-
-    expect(auth.refresh).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/organizers/me/profile", expect.objectContaining({
-      headers: expect.objectContaining({ Authorization: "Bearer fresh" }),
-    }));
   });
 
   it("refreshes once and retries after a 401", async () => {
@@ -48,9 +36,7 @@ describe("organizerProfileApi", () => {
     await expect(organizerProfileApi.getProfile(auth)).resolves.toMatchObject({ organizationName: "Liga Miga" });
 
     expect(auth.refresh).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenNthCalledWith(2, "http://localhost:8080/api/v1/organizers/me/profile", expect.objectContaining({
-      headers: expect.objectContaining({ Authorization: "Bearer fresh" }),
-    }));
+    expect(fetchMock).toHaveBeenNthCalledWith(2, "/api/organizers/me/profile", expect.objectContaining({ credentials: "include" }));
   });
 
   it("throws a safe error when recovery fails", async () => {
@@ -59,7 +45,7 @@ describe("organizerProfileApi", () => {
       .mockResolvedValueOnce(new Response(null, { status: 403 }));
 
     await expect(organizerProfileApi.saveProfile(auth, input())).rejects.toMatchObject({
-      message: "We could not save your organization profile. Please try again.",
+      message: "Não foi possível salvar o perfil da organização. Tente novamente.",
       status: 403,
     } satisfies Partial<OrganizerProfileApiError>);
   });
@@ -69,7 +55,7 @@ describe("organizerProfileApi", () => {
 
     await organizerProfileApi.saveProfile(auth, input());
 
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/organizers/me/profile", expect.objectContaining({
+    expect(fetchMock).toHaveBeenCalledWith("/api/organizers/me/profile", expect.objectContaining({
       method: "PUT",
       body: JSON.stringify(input()),
       headers: expect.objectContaining({ "Content-Type": "application/json" }),

@@ -24,9 +24,9 @@ describe("TeamListScreen", () => {
   it("shows the empty state and creates a team without reload", async () => {
     renderWithClient(<TeamListScreen />);
 
-    expect(await screen.findByText(/no teams yet/i)).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/team name/i), { target: { value: "Liga Miga" } });
-    fireEvent.click(screen.getByRole("button", { name: /create team/i }));
+    expect(await screen.findByText(/nenhum elenco ativo ainda/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/nome do time/i), { target: { value: "Liga Miga" } });
+    fireEvent.click(screen.getByRole("button", { name: /criar time/i }));
 
     await waitFor(() => expect(teamsApi.create).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ name: "Liga Miga" })));
     expect(await screen.findByRole("heading", { name: "Liga Miga" })).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("TeamListScreen", () => {
 
     renderWithClient(<TeamListScreen />);
 
-    expect(await screen.findByText("Invited")).toBeInTheDocument();
+    expect(await screen.findByText("Convidada")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /liga miga/i })).toHaveAttribute("href", "/teams/team-1");
   });
 

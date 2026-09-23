@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Squadra - Login &amp; Register</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#bdcaba",
+                        "primary-container": "#00873a",
+                        "secondary-container": "#9e41f5",
+                        "on-tertiary-container": "#4e3e00",
+                        "on-primary-fixed-variant": "#005320",
+                        "tertiary": "#735c00",
+                        "on-background": "#131b2e",
+                        "on-primary-container": "#f7fff2",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#faf8ff",
+                        "background": "#faf8ff",
+                        "primary-fixed": "#7ffc97",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-surface-variant": "#3e4a3d",
+                        "inverse-primary": "#62df7d",
+                        "surface-container": "#eaedff",
+                        "secondary": "#831ada",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#2c0051",
+                        "secondary-fixed-dim": "#ddb8ff",
+                        "tertiary-fixed-dim": "#eec200",
+                        "secondary-fixed": "#f0dbff",
+                        "surface-variant": "#dae2fd",
+                        "primary": "#006b2c",
+                        "surface-container-low": "#f2f3ff",
+                        "tertiary-container": "#cea700",
+                        "surface-dim": "#d2d9f4",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#6e7b6c",
+                        "on-primary-fixed": "#002109",
+                        "surface-tint": "#006e2d",
+                        "surface-container-high": "#e2e7ff",
+                        "tertiary-fixed": "#ffe083",
+                        "on-surface": "#131b2e",
+                        "on-secondary-container": "#fffbff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#dae2fd",
+                        "on-error-container": "#93000a",
+                        "surface": "#faf8ff",
+                        "inverse-surface": "#283044",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-secondary-fixed-variant": "#6800b4",
+                        "primary-fixed-dim": "#62df7d",
+                        "on-tertiary-fixed-variant": "#574500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xl": "40px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Outfit"],
+                        "display-lg-mobile": ["Outfit"],
+                        "stats-number": ["Outfit"],
+                        "display-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "label-bold": ["Inter"],
+                        "headline-lg": ["Outfit"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "stats-number": ["40px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .form-transition {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .form-hidden {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            position: absolute;
+            visibility: hidden;
+        }
+        .form-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="h-full bg-surface-container-lowest text-on-surface font-body-md antialiased overflow-hidden">
+<div class="flex h-full w-full">
+<!-- Left Side: Hero Image/Video (Hidden on small screens) -->
+<div class="hidden lg:flex lg:w-1/2 relative bg-surface-variant">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="High-resolution, dynamic photograph of women's amateur football players in mid-action on a vibrant green pitch. The lighting is cinematic, highlighting the intensity and athleticism of the players. The color palette emphasizes rich greens and sharp, professional lighting, conveying a modern, sporty, and energetic aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNOcjds0KIhujspPkMztrl8crkAV6F-ECnTPZnrI2XzyZcvtUpElj5uRhjz900OP4CXLpRgKZP6_8koAkboVy_2xyOXmNPLLDlBwnHPGAMzLFbUNyAfGhakonwiibvl-c_UYL0jPa6RnttWkvjePOCmPYZDUdqawnPnza4pvj4DMIRm65mH-wb_gr95EC9NZKOFqosmGgKB5A3lfNxkUwLu0FYu-FCl5Vhq_sYy99G9AJNV5DcCvIB')"></div>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex flex-col justify-end p-xl pb-24">
+<h1 class="font-display-lg text-display-lg text-on-primary mb-sm drop-shadow-md">Play. Compete. Belong.</h1>
+<p class="font-body-lg text-body-lg text-surface-container-lowest max-w-md drop-shadow-sm">Join the premier platform for women's amateur football. Connect with teams, track stats, and elevate your game.</p>
+</div>
+<!-- Floating Logo -->
+<div class="absolute top-xl left-xl flex items-center gap-sm text-on-primary drop-shadow-md">
+<span class="material-symbols-outlined text-4xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="font-headline-md text-headline-md font-bold tracking-tight">Squadra</span>
+</div>
+</div>
+<!-- Right Side: Form Container -->
+<div class="w-full lg:w-1/2 flex items-center justify-center p-gutter sm:p-xl bg-surface-container-lowest overflow-y-auto">
+<!-- Main Card -->
+<div class="w-full max-w-[440px] bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative">
+<!-- Mobile Logo (Visible only when left side is hidden) -->
+<div class="lg:hidden flex items-center justify-center gap-sm mb-lg text-primary">
+<span class="material-symbols-outlined text-3xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="font-headline-md text-headline-md font-bold">Squadra</span>
+</div>
+<!-- Form Container with absolute positioning for transitions -->
+<div class="relative w-full h-full min-h-[400px]">
+<!-- Login Form -->
+<div class="form-transition form-visible w-full" id="login-form">
+<div class="mb-xl text-center">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Welcome Back</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Log in to manage your team and stats.</p>
+</div>
+<form class="flex flex-col gap-md">
+<div>
+<label class="block font-label-bold text-label-bold text-on-surface mb-xs" for="login-email">Email Address</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-md py-3 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-on-surface-variant/50" id="login-email" placeholder="player@squadra.com" type="email"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-xs">
+<label class="block font-label-bold text-label-bold text-on-surface" for="login-password">Password</label>
+<a class="font-label-bold text-label-bold text-primary hover:text-primary-container transition-colors" href="#">Forgot?</a>
+</div>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-md py-3 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="login-password" placeholder="••••••••" type="password"/>
+</div>
+<button class="mt-sm w-full bg-primary hover:bg-surface-tint text-on-primary font-label-bold text-label-bold py-4 rounded-lg transition-colors flex items-center justify-center gap-sm shadow-[0_4px_20px_rgba(0,107,44,0.15)]" type="button">
+                                Sign In
+                                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+<div class="relative flex items-center py-sm">
+<div class="flex-grow border-t border-outline-variant/50"></div>
+<span class="flex-shrink-0 mx-sm font-label-bold text-label-bold text-on-surface-variant">OR</span>
+<div class="flex-grow border-t border-outline-variant/50"></div>
+</div>
+<button class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface hover:bg-surface-container-low font-label-bold text-label-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-sm" type="button">
+<span class="material-symbols-outlined">login</span>
+                                Continue with Google
+                            </button>
+</form>
+<p class="mt-lg text-center font-body-md text-body-md text-on-surface-variant">
+                            New to Squadra? 
+                            <button class="font-label-bold text-label-bold text-primary hover:underline outline-none" onclick="toggleForm('register')">Create an account</button>
+</p>
+</div>
+<!-- Registration Form -->
+<div class="form-transition form-hidden w-full" id="register-form">
+<div class="mb-lg text-center">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Join the Squad</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Create your player profile today.</p>
+</div>
+<form class="flex flex-col gap-md">
+<div class="flex gap-md">
+<div class="w-1/2">
+<label class="block font-label-bold text-label-bold text-on-surface mb-xs" for="reg-first-name">First Name</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-md py-3 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="reg-first-name" placeholder="Alex" type="text"/>
+</div>
+<div class="w-1/2">
+<label class="block font-label-bold text-label-bold text-on-surface mb-xs" for="reg-last-name">Last Name</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-md py-3 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="reg-reg-last-name" placeholder="Morgan" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-bold text-label-bold text-on-surface mb-xs" for="reg-email">Email Address</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-md py-3 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="reg-email" placeholder="player@squadra.com" type="email"/>
+</div>
+<div>
+<label class="block font-label-bold text-label-bold text-on-surface mb-xs" for="reg-password">Password</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-md py-3 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none" id="reg-password" placeholder="Create a strong password" type="password"/>
+</div>
+<div class="flex items-start gap-sm mt-xs">
+<input class="mt-1 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+<label class="font-body-md text-[14px] text-on-surface-variant leading-tight" for="terms">
+                                    I agree to the <a class="text-primary hover:underline" href="#">Terms of Service</a> and <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+                                </label>
+</div>
+<button class="mt-sm w-full bg-primary hover:bg-surface-tint text-on-primary font-label-bold text-label-bold py-4 rounded-lg transition-colors flex items-center justify-center gap-sm shadow-[0_4px_20px_rgba(0,107,44,0.15)]" type="button">
+                                Create Account
+                                <span class="material-symbols-outlined text-xl">person_add</span>
+</button>
+</form>
+<p class="mt-lg text-center font-body-md text-body-md text-on-surface-variant">
+                            Already a player? 
+                            <button class="font-label-bold text-label-bold text-primary hover:underline outline-none" onclick="toggleForm('login')">Sign In</button>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        function toggleForm(target) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            
+            if (target === 'register') {
+                loginForm.classList.remove('form-visible');
+                loginForm.classList.add('form-hidden');
+                
+                // Small delay to allow fade out before fade in
+                setTimeout(() => {
+                    registerForm.classList.remove('form-hidden');
+                    registerForm.classList.add('form-visible');
+                }, 150);
+            } else {
+                registerForm.classList.remove('form-visible');
+                registerForm.classList.add('form-hidden');
+                
+                setTimeout(() => {
+                    loginForm.classList.remove('form-hidden');
+                    loginForm.classList.add('form-visible');
+                }, 150);
+            }
+        }
+    </script>
+</body></html>

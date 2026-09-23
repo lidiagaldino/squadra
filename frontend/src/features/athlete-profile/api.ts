@@ -37,12 +37,10 @@ export class AthleteProfileApiError extends Error {
 }
 
 type AuthSession = {
-  accessToken: string | null;
-  refresh(): Promise<string>;
+  refresh(): Promise<unknown>;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
-const profileUrl = `${apiBaseUrl}/api/v1/athletes/me/profile`;
+const profileUrl = "/api/athletes/me/profile";
 
 export const athleteProfileApi = {
   getProfile: (auth: AuthSession) => authorizedRequest<AthleteProfile | null>("GET", auth),
@@ -50,12 +48,11 @@ export const athleteProfileApi = {
 };
 
 async function authorizedRequest<T>(method: "GET" | "PUT", auth: AuthSession, body?: unknown): Promise<T> {
-  let token = auth.accessToken ?? await auth.refresh();
-  let response = await request(method, token, body);
+  let response = await request(method, body);
 
   if (response.status === 401) {
-    token = await auth.refresh();
-    response = await request(method, token, body);
+    await auth.refresh();
+    response = await request(method, body);
   }
 
   if (method === "GET" && response.status === 404) {
@@ -63,20 +60,17 @@ async function authorizedRequest<T>(method: "GET" | "PUT", auth: AuthSession, bo
   }
 
   if (!response.ok) {
-    throw new AthleteProfileApiError("We could not save your athlete profile. Please try again.", response.status);
+    throw new AthleteProfileApiError("Não foi possível salvar seu perfil de atleta. Tente novamente.", response.status);
   }
 
   return response.json() as Promise<T>;
 }
 
-function request(method: "GET" | "PUT", accessToken: string, body?: unknown) {
+function request(method: "GET" | "PUT", body?: unknown) {
   return fetch(profileUrl, {
     method,
     credentials: "include",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      ...(body ? { "Content-Type": "application/json" } : {}),
-    },
+    headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
 }

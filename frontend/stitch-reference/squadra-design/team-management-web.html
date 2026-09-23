@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Team Management - Squadra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#bdcaba",
+                    "primary-container": "#00873a",
+                    "secondary-container": "#9e41f5",
+                    "on-tertiary-container": "#4e3e00",
+                    "on-primary-fixed-variant": "#005320",
+                    "tertiary": "#735c00",
+                    "on-background": "#131b2e",
+                    "on-primary-container": "#f7fff2",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#faf8ff",
+                    "background": "#faf8ff",
+                    "primary-fixed": "#7ffc97",
+                    "inverse-on-surface": "#eef0ff",
+                    "on-surface-variant": "#3e4a3d",
+                    "inverse-primary": "#62df7d",
+                    "surface-container": "#eaedff",
+                    "secondary": "#831ada",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed": "#2c0051",
+                    "secondary-fixed-dim": "#ddb8ff",
+                    "tertiary-fixed-dim": "#eec200",
+                    "secondary-fixed": "#f0dbff",
+                    "surface-variant": "#dae2fd",
+                    "primary": "#006b2c",
+                    "surface-container-low": "#f2f3ff",
+                    "tertiary-container": "#cea700",
+                    "surface-dim": "#d2d9f4",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#6e7b6c",
+                    "on-primary-fixed": "#002109",
+                    "surface-tint": "#006e2d",
+                    "surface-container-high": "#e2e7ff",
+                    "tertiary-fixed": "#ffe083",
+                    "on-surface": "#131b2e",
+                    "on-secondary-container": "#fffbff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#dae2fd",
+                    "on-error-container": "#93000a",
+                    "surface": "#faf8ff",
+                    "inverse-surface": "#283044",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#231b00",
+                    "on-secondary-fixed-variant": "#6800b4",
+                    "primary-fixed-dim": "#62df7d",
+                    "on-tertiary-fixed-variant": "#574500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "xl": "40px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "container-max": "1280px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Outfit"
+                    ],
+                    "display-lg-mobile": [
+                            "Outfit"
+                    ],
+                    "stats-number": [
+                            "Outfit"
+                    ],
+                    "display-lg": [
+                            "Outfit"
+                    ],
+                    "headline-lg-mobile": [
+                            "Outfit"
+                    ],
+                    "label-bold": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Outfit"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "36px",
+                            {
+                                    "lineHeight": "44px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "stats-number": [
+                            "40px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-bold": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface text-on-surface h-full flex antialiased">
+<!-- SideNavBar (Desktop Only) -->
+<nav class="hidden md:flex bg-surface-container-lowest border-r border-outline-variant fixed left-0 top-0 h-full w-[280px] flex-col py-xl px-md gap-sm z-50">
+<!-- Header -->
+<div class="mb-lg px-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Squadra</h1>
+<p class="font-label-bold text-label-bold text-on-surface-variant">Women's Football</p>
+</div>
+</div>
+<!-- Main Tabs -->
+<div class="flex-1 flex flex-col gap-sm">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all scale-98 active:scale-95 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-l-4 border-primary bg-surface-container-low transition-all scale-98 active:scale-95 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+                Teams
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all scale-98 active:scale-95 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+                Tournaments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all scale-98 active:scale-95 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">person</span>
+                Profile
+            </a>
+</div>
+<!-- CTA -->
+<div class="mb-sm">
+<button class="w-full bg-primary text-on-primary py-3 rounded-full font-label-bold text-label-bold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+                Create Team
+            </button>
+</div>
+<!-- Footer Tabs -->
+<div class="flex flex-col gap-sm pt-sm border-t border-outline-variant">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all scale-98 active:scale-95 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all scale-98 active:scale-95 font-label-bold text-label-bold" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] h-full overflow-y-auto">
+<!-- Header Section -->
+<header class="bg-surface-container-lowest border-b border-outline-variant py-xl px-gutter md:px-xl sticky top-0 z-40">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row md:items-end justify-between gap-lg">
+<div class="flex items-center gap-lg">
+<!-- Team Crest -->
+<div class="w-24 h-24 md:w-32 md:h-32 rounded-xl border border-outline-variant bg-surface-container shadow-sm overflow-hidden flex-shrink-0 relative">
+<img class="w-full h-full object-cover" data-alt="A modern, minimalist team crest for a women's football team featuring a stylized lioness head in deep purple and gold. The crest has clean lines and a professional, athletic aesthetic set against a light background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA64JcgAh9cHzAFuV0RUp9m6M-bbcLb1K6-_9Uvsj7BV8sy6NvD2C3S9mnJ8bpTjzFONp-26qUu6lplcmAamlqgxvZ2ap3NmZt320mX1f9YejHyyNF-Tke-9vbZjOH7uB1ky2AtFNsBniKW66U7ui5O2U8rG8mJo5-klEtu9-JSUSjvf0RP2hw_lYA-V-Y7Yw4vH0VhLEr7VhxWMLdkOJoBj4n8v_dYArwSlVeU0G6d9Xd04FjRh045"/>
+<!-- Edit overlay on hover -->
+<div class="absolute inset-0 bg-on-background/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-on-primary">edit</span>
+</div>
+</div>
+<!-- Team Info -->
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low text-primary text-xs font-label-bold mb-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            Active Season
+                        </div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">Metro Valkyries</h1>
+<div class="flex items-center gap-4 text-on-surface-variant font-body-md text-body-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">location_on</span> North City League</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">group</span> 18 Players</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-6 py-3 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low transition-colors font-label-bold text-label-bold">
+<span class="material-symbols-outlined">settings</span>
+                        Team Settings
+                    </button>
+<button class="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-container text-on-primary font-label-bold text-label-bold hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined">edit</span>
+                        Edit Roster
+                    </button>
+</div>
+</div>
+</header>
+<!-- Main 2-Column Layout -->
+<div class="max-w-container-max mx-auto p-gutter md:p-xl grid grid-cols-1 lg:grid-cols-3 gap-xl">
+<!-- Left Column: Roster List (Takes up 2 cols on lg) -->
+<section class="lg:col-span-2 flex flex-col gap-lg">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Active Roster</h2>
+<div class="flex gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md font-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-64" placeholder="Search players..." type="text"/>
+</div>
+<button class="p-2 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Roster Table / List -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Header Row -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-outline-variant bg-surface-container-low font-label-bold text-label-bold text-on-surface-variant">
+<div class="col-span-6 md:col-span-4">Player</div>
+<div class="col-span-3 md:col-span-2">Position</div>
+<div class="hidden md:block md:col-span-2 text-center">App</div>
+<div class="hidden md:block md:col-span-2 text-center">Goals</div>
+<div class="col-span-3 md:col-span-2 text-right">Role</div>
+</div>
+<!-- Player Rows -->
+<div class="flex flex-col">
+<!-- Row 1 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-outline-variant hover:bg-surface-container-low transition-colors items-center group cursor-pointer">
+<div class="col-span-6 md:col-span-4 flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a female football player wearing a purple jersey, energetic and confident, bright natural lighting, modern sports portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6OMoPeJIoCYx4S3MQOlTzQk7fS5xJhzG3gNeHKaADmdmpbrw4YtT6dI7j__rpmuu3jxeXmDzJon-WflAdcNrjGmddt8gYdILzk7V_sCVSQ_kA4uIVAE-e9Mebq6PjGSkdzGzhQ9zd-dRbZSXQT2o0BdFrtY4IieyVJAdxttllMFq5xiqmLGsb5vXEclH8KoPPZ1Wr5oKd17z1TuuUb67lrqYHtp1TahrCGi1QU4rGCoMYUSMZoRC"/>
+<div>
+<div class="font-label-bold text-label-bold text-on-surface group-hover:text-primary transition-colors">Sarah Jenkins</div>
+<div class="font-body-md text-sm text-on-surface-variant">#10</div>
+</div>
+</div>
+<div class="col-span-3 md:col-span-2 font-body-md text-body-md text-on-surface">Forward</div>
+<div class="hidden md:flex md:col-span-2 justify-center font-body-md text-body-md text-on-surface">12</div>
+<div class="hidden md:flex md:col-span-2 justify-center font-body-md text-body-md text-on-surface font-semibold text-primary">8</div>
+<div class="col-span-3 md:col-span-2 flex justify-end">
+<span class="px-2 py-1 bg-tertiary-container/20 text-tertiary-container rounded text-xs font-label-bold border border-tertiary-container/30">Captain</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-outline-variant hover:bg-surface-container-low transition-colors items-center group cursor-pointer">
+<div class="col-span-6 md:col-span-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-label-bold">MR</div>
+<div>
+<div class="font-label-bold text-label-bold text-on-surface group-hover:text-primary transition-colors">Maria Rodriguez</div>
+<div class="font-body-md text-sm text-on-surface-variant">#4</div>
+</div>
+</div>
+<div class="col-span-3 md:col-span-2 font-body-md text-body-md text-on-surface">Defender</div>
+<div class="hidden md:flex md:col-span-2 justify-center font-body-md text-body-md text-on-surface">14</div>
+<div class="hidden md:flex md:col-span-2 justify-center font-body-md text-body-md text-on-surface">1</div>
+<div class="col-span-3 md:col-span-2 flex justify-end">
+<span class="text-on-surface-variant font-body-md text-sm">Player</span>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 gap-4 px-6 py-4 border-b border-outline-variant hover:bg-surface-container-low transition-colors items-center group cursor-pointer">
+<div class="col-span-6 md:col-span-4 flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a female football goalkeeper wearing a green jersey, focused and intense, bright natural lighting, modern sports portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMkDLvr_Tp06Tbviupl2EMX7wsCgSUgzDXzyZaxEcO1EaB6jl65-C3HSI9ALwZSQcviRnscxFzFChJQMulQRkquDMVF_B2mm2H4rDvhHmNknlaJv2q1aScqCTUnmvgBkWwCLunc6GemTkntPRWegtHxlEMrNtSVM5CuhQ0nql1-sAwpIuTKnEoQtVk_mRh55CMoeFwnRIpetIo9NJBQxyJr2CmfCIrZnTXU0qWosEVle9ssDjgM7Z_"/>
+<div>
+<div class="font-label-bold text-label-bold text-on-surface group-hover:text-primary transition-colors">Emma Chen</div>
+<div class="font-body-md text-sm text-on-surface-variant">#1</div>
+</div>
+</div>
+<div class="col-span-3 md:col-span-2 font-body-md text-body-md text-on-surface">Goalkeeper</div>
+<div class="hidden md:flex md:col-span-2 justify-center font-body-md text-body-md text-on-surface">14</div>
+<div class="hidden md:flex md:col-span-2 justify-center font-body-md text-body-md text-on-surface">0</div>
+<div class="col-span-3 md:col-span-2 flex justify-end">
+<span class="text-on-surface-variant font-body-md text-sm">Player</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Management Panel -->
+<aside class="flex flex-col gap-xl">
+<!-- Invite Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">person_add</span>
+                        Invite Players
+                    </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Send an email invitation to join the team roster.</p>
+<div class="flex flex-col gap-3">
+<input class="w-full px-4 py-2 rounded-lg border border-outline-variant bg-surface text-body-md font-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="player@example.com" type="email"/>
+<button class="w-full bg-primary text-on-primary py-2 rounded-lg font-label-bold text-label-bold hover:bg-primary-container transition-colors">
+                            Send Invite
+                        </button>
+</div>
+<!-- Pending Invites -->
+<div class="mt-6 pt-6 border-t border-outline-variant">
+<h4 class="font-label-bold text-label-bold text-on-surface mb-3 uppercase tracking-wider text-xs">Pending Invites (2)</h4>
+<ul class="flex flex-col gap-3">
+<li class="flex items-center justify-between">
+<span class="font-body-md text-sm text-on-surface-variant">j.doe@example.com</span>
+<button class="text-error text-xs font-label-bold hover:underline">Revoke</button>
+</li>
+<li class="flex items-center justify-between">
+<span class="font-body-md text-sm text-on-surface-variant">k.smith@example.com</span>
+<button class="text-error text-xs font-label-bold hover:underline">Revoke</button>
+</li>
+</ul>
+</div>
+</div>
+<!-- Team Admins -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-container">admin_panel_settings</span>
+                            Team Admins
+                        </h3>
+<button class="text-primary hover:bg-surface-container-low p-1 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<ul class="flex flex-col gap-4">
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary text-xs font-bold">AL</div>
+<div class="flex-1">
+<div class="font-label-bold text-sm text-on-surface">Alex Lawson</div>
+<div class="font-body-md text-xs text-on-surface-variant">Manager</div>
+</div>
+</li>
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface text-xs font-bold">SJ</div>
+<div class="flex-1">
+<div class="font-label-bold text-sm text-on-surface">Sarah Jenkins</div>
+<div class="font-body-md text-xs text-on-surface-variant">Captain / Co-Admin</div>
+</div>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

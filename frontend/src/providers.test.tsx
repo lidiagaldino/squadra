@@ -1,7 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Providers } from "./providers";
+
+vi.mock("next-auth/react", () => ({
+  SessionProvider: ({ children }: Readonly<{ children: React.ReactNode }>) => <>{children}</>,
+  useSession: () => ({ data: null, update: vi.fn() }),
+}));
 
 function QueryClientConsumer() {
   const client = useQueryClient();

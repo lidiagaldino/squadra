@@ -13,14 +13,14 @@ type AttentionItem = {
 };
 
 const organizerAttention: AttentionItem[] = [
-  { title: "6 registrations need review", detail: "Liga Miga 2026 closes registration in 2 days.", tone: "warning", action: "Review" },
-  { title: "Payment issue in Adulto B", detail: "Two teams are confirmed but still awaiting fee settlement.", tone: "danger", action: "Open" },
-  { title: "Draw can be generated", detail: "Sub-17 category has enough confirmed teams.", tone: "info", action: "Generate" },
+  { title: "12 inscrições pendentes", detail: "Autumn League recebeu 4 novas inscrições de times hoje.", tone: "warning", action: "Revisar" },
+  { title: "Check-in de arbitragem", detail: "Summer Cup precisa confirmar a arbitragem dos Campos A e B.", tone: "danger", action: "Abrir" },
+  { title: "Jogos hoje", detail: "8 jogos estão agendados na linha do tempo dos torneios ativos.", tone: "info", action: "Ver" },
 ];
 
 const athleteAttention: AttentionItem[] = [
-  { title: "Confirm your team invitation", detail: "Estrelas FC added you for Liga Miga 2026.", tone: "warning", action: "Respond" },
-  { title: "Registration payment pending", detail: "Your tournament spot is held until Friday.", tone: "danger", action: "Pay" },
+  { title: "Próximo jogo", detail: "City Valkyries enfrenta Northside Utd no sábado, 24 de outubro, às 14:00.", tone: "warning", action: "Confirmar" },
+  { title: "Conquista desbloqueada", detail: "Heroína do hat-trick no último jogo contra East Enders.", tone: "info", action: "Ver" },
 ];
 
 export default function AuthenticatedHomePage() {
@@ -49,14 +49,15 @@ function HomeShell({ user, onLogout, children }: Readonly<{ user: AuthenticatedU
 
   return (
     <main className="home-shell">
-      <aside className="home-rail" aria-label="Squadra navigation">
-        <Link className="brand-mark" href="/home" aria-label="Squadra Home">S</Link>
+      <aside className="home-rail" aria-label="Navegação do Squadra">
+        <Link className="brand-mark" href="/home" aria-label="Início do Squadra">S</Link>
         <nav>
-          <Link aria-current="page" href="/home">Home</Link>
-          <Link href={user.role === "ATHLETE" ? "/athlete/profile" : "/organizer/profile"}>Profile</Link>
-          <Link href="/teams">Teams</Link>
+          <Link aria-current="page" href="/home">Início</Link>
+          <Link href={user.role === "ATHLETE" ? "/athlete/profile" : "/organizer/profile"}>Perfil</Link>
+          <Link href="/teams">Times</Link>
+          {user.role === "ORGANIZER" && <Link href="/tournaments">Torneios</Link>}
         </nav>
-        <button className="text-button" onClick={() => void signOut()}>Sign out</button>
+        <button className="text-button" onClick={() => void signOut()}>Sair</button>
       </aside>
       <section className="home-content">{children}</section>
     </main>
@@ -69,46 +70,46 @@ function OrganizerHome({ user, onLogout }: Readonly<{ user: AuthenticatedUser; o
     <HomeShell user={user} onLogout={onLogout}>
       <section className="home-hero organizer-hero">
         <div>
-          <p className="eyebrow">Organizer Home</p>
-          <h1>Good match day, {firstName}.</h1>
-          <p>Three tournaments are moving. Start with the items that can block teams from playing.</p>
+          <p className="eyebrow">Painel</p>
+          <h1>Bom dia de jogo, {firstName}.</h1>
+          <p>Acompanhe torneios ativos, inscrições pendentes e operações dos jogos de hoje em uma central de ações.</p>
         </div>
-        <div className="match-chip" aria-label="Next tournament activity">
-          <span>Next</span>
-          <strong>Adulto B draw</strong>
-          <small>Today, 18:30</small>
+        <div className="match-chip" aria-label="Próxima atividade do torneio">
+          <span>Torneios ativos</span>
+          <strong>3</strong>
+          <small>12 inscrições pendentes • 8 jogos hoje</small>
         </div>
       </section>
 
       <section className="home-grid organizer-grid">
-        <Panel title="Requires Attention" className="attention-panel">
+        <Panel title="Precisa de Atenção" className="attention-panel">
           <AttentionList items={organizerAttention} />
         </Panel>
 
-        <Panel title="Active Tournaments">
+        <Panel title="Torneios Ativos">
           <div className="tournament-list">
-            <TournamentOperation name="Liga Miga 2026" status="OPEN" detail="36 teams • 6 pending registrations" progress="Registration" action="Manage" />
-            <TournamentOperation name="Copa Delas SP" status="DRAFT" detail="4 categories • schedule missing" progress="Configuration" action="Configure" />
-            <TournamentOperation name="Festival Sub-17" status="CONFIRMED" detail="12 teams • draw ready" progress="Draw" action="Generate draw" />
+            <TournamentOperation name="Summer Cup" status="ABERTO" detail="Início da fase de grupos • arbitragem necessária" progress="Hoje, 14:00" action="Gerenciar" />
+            <TournamentOperation name="Autumn League" status="RASCUNHO" detail="Chamada final para inscrições de times" progress="Amanhã, 10:00" action="Revisar" />
+            <TournamentOperation name="Winter Invitational" status="CONFIRMADO" detail="Tabela fechada para os jogos do fim de semana" progress="Jogos hoje" action="Ver" />
           </div>
         </Panel>
 
-        <Panel title="Upcoming Activity" className="timeline-panel">
+        <Panel title="Linha do Tempo da Gestão" className="timeline-panel">
           <ol className="activity-list">
-            <li><time>Today</time><span>Registration review window closes for Liga Miga.</span></li>
-            <li><time>Tomorrow</time><span>Copa Delas category configuration should be completed.</span></li>
-            <li><time>Sat</time><span>First match slots become available for scheduling.</span></li>
+            <li><time>Hoje, 14:00</time><span>Summer Cup - início da fase de grupos.</span></li>
+            <li><time>Amanhã, 10:00</time><span>Prazo de inscrição: Autumn League.</span></li>
+            <li><time>Sáb</time><span>Revisar preparação dos campos para os jogos.</span></li>
           </ol>
         </Panel>
 
         <section className="action-band" aria-labelledby="organizer-actions">
           <div>
-            <p className="eyebrow">Next best actions</p>
-            <h2 id="organizer-actions">Keep tournaments playable.</h2>
+            <p className="eyebrow">Próximas ações</p>
+            <h2 id="organizer-actions">Central de Ações</h2>
           </div>
           <div className="action-row">
-            <Link className="primary-link" href="/home">Review registrations</Link>
-            <Link className="secondary-action" href="/home">Create tournament</Link>
+            <Link className="primary-link" href="/home">Ver tudo</Link>
+            <Link className="secondary-action" href="/tournaments">Criar torneio</Link>
           </div>
         </section>
       </section>
@@ -117,54 +118,53 @@ function OrganizerHome({ user, onLogout }: Readonly<{ user: AuthenticatedUser; o
 }
 
 function AthleteHome({ user, onLogout }: Readonly<{ user: AuthenticatedUser; onLogout(): Promise<void> }>) {
-  const firstName = useDisplayName(user.email);
   return (
     <HomeShell user={user} onLogout={onLogout}>
       <section className="home-hero athlete-hero">
         <div>
-          <p className="eyebrow">Athlete Home</p>
-          <h1>{firstName}, your next match is set.</h1>
-          <p>You are listed with Estrelas FC in Liga Miga 2026. Confirm the invite to lock your spot.</p>
+          <p className="eyebrow">Área da atleta</p>
+          <h1>Bem-vinda de volta, Elena</h1>
+          <p>Próximo jogo em 2 dias. Hora de se preparar.</p>
         </div>
-        <div className="score-card" aria-label="Next match">
-          <span>Next match</span>
-          <strong>Estrelas FC vs Aurora</strong>
-          <small>Sat • 10:30 • Court 2</small>
+        <div className="score-card" aria-label="Próximo jogo">
+          <span>Próximo jogo</span>
+          <strong>City Valkyries vs Northside Utd</strong>
+          <small>Sáb, 24 de out • 14:00</small>
         </div>
       </section>
 
       <section className="home-grid athlete-grid">
-        <Panel title="Pending Actions" className="attention-panel">
+        <Panel title="Ações Pendentes" className="attention-panel">
           <AttentionList items={athleteAttention} />
         </Panel>
 
-        <Panel title="My Tournaments">
+        <Panel title="Próximo Jogo">
           <article className="athlete-tournament">
             <div>
-              <p className="status-pill">Liga Miga 2026</p>
-              <h3>Estrelas FC • Intermediate</h3>
-              <p>Group stage starts this weekend. Your team is 2nd on goal difference.</p>
+              <p className="status-pill">Sáb, 24 de out • 14:00</p>
+              <h3>City Valkyries vs Northside Utd</h3>
+              <p>Riverside Community Pitch.</p>
             </div>
-            <Link className="secondary-action" href="/home">View tournament</Link>
+            <Link className="secondary-action" href="/home">Confirmar</Link>
           </article>
         </Panel>
 
-        <Panel title="Recent Result">
+        <Panel title="Perfil da Atleta">
           <div className="result-board">
-            <span>Estrelas FC</span><strong>3</strong><strong>1</strong><span>Vila Norte</span>
+            <span>Elena R.</span><strong>12</strong><strong>8</strong><span>Gols / Assistências</span>
           </div>
-          <p className="panel-note">You logged 1 assist and completed 82% of your passes.</p>
+          <p className="panel-note">Meio-campista • #8 • Forma recente V V E D V.</p>
         </Panel>
 
         <section className="progress-band" aria-labelledby="athlete-progress">
           <div>
-            <p className="eyebrow">Progress</p>
-            <h2 id="athlete-progress">Building your football story.</h2>
+            <p className="eyebrow">Progresso</p>
+            <h2 id="athlete-progress">Feed de Atividades</h2>
           </div>
-          <div className="badge-row" aria-label="Recent achievements">
-            <span>First assist</span>
-            <span>Clean sheet squad</span>
-            <span>3 matches played</span>
+          <div className="badge-row" aria-label="Conquistas recentes">
+            <span>Heroína do hat-trick</span>
+            <span>Set_Pieces_Q4.pdf</span>
+            <span>Summer 7s League</span>
           </div>
         </section>
       </section>
@@ -208,16 +208,16 @@ function TournamentOperation({ name, status, detail, progress, action }: Readonl
 }
 
 function HomeLoadingState() {
-  return <main className="home-state"><p className="eyebrow">Squadra</p><h1>Restoring your match context.</h1><p>Checking your secure session...</p></main>;
+  return <main className="home-state"><p className="eyebrow">Squadra</p><h1>Restaurando seu contexto de jogo.</h1><p>Verificando sua sessão segura...</p></main>;
 }
 
 function SignedOutHome() {
-  return <main className="home-state"><p className="eyebrow">Squadra</p><h1>Sign in to see your Home.</h1><p>Your tournaments, matches and next actions appear after authentication.</p><Link className="primary-link" href="/login">Sign in</Link></main>;
+  return <main className="home-state"><p className="eyebrow">Squadra</p><h1>Entre para ver seu início.</h1><p>Seus torneios, jogos e próximas ações aparecem depois da autenticação.</p><Link className="primary-link" href="/login">Entrar</Link></main>;
 }
 
 function useDisplayName(email: string) {
   return useMemo(() => {
-    const localPart = email.split("@")[0] || "there";
+    const localPart = email.split("@")[0] || "atleta";
     return localPart.split(/[._-]/)[0].replace(/^\w/, (letter) => letter.toUpperCase());
   }, [email]);
 }

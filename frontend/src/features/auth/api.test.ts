@@ -9,23 +9,17 @@ describe("authApi", () => {
     vi.stubGlobal("fetch", fetchMock);
   });
 
-  it("uses cookie credentials and returns an access token without storing it", async () => {
-    fetchMock.mockResolvedValue(new Response(JSON.stringify({ accessToken: "access" }), { status: 200 }));
-    await expect(authApi.login("player@squadra.test", "correct horse battery")).resolves.toEqual({ accessToken: "access" });
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/auth/login", expect.objectContaining({ credentials: "include", method: "POST" }));
-  });
-
   it("rejects generic API failures", async () => {
     fetchMock.mockResolvedValue(new Response(null, { status: 401 }));
-    await expect(authApi.refresh()).rejects.toMatchObject({
-      message: "We could not complete that request. Please try again.",
+    await expect(authApi.register("player@squadra.test", "a safe password", "ATHLETE")).rejects.toMatchObject({
+      message: "Não foi possível concluir essa solicitação. Tente novamente.",
       status: 401,
     } satisfies Partial<AuthApiError>);
   });
 
   it("handles tokenless 204 responses", async () => {
     fetchMock.mockResolvedValue(new Response(null, { status: 204 }));
-    await expect(authApi.logout()).resolves.toBeUndefined();
+    await expect(authApi.requestPasswordRecovery("player@squadra.test")).resolves.toBeUndefined();
   });
 
   it("sends registration and password-recovery payloads to their dedicated endpoints", async () => {
@@ -38,10 +32,10 @@ describe("authApi", () => {
     await expect(authApi.requestPasswordRecovery("player@squadra.test")).resolves.toBeUndefined();
     await expect(authApi.resetPassword("reset-token", "a safer password")).resolves.toBeUndefined();
 
-    expect(fetchMock).toHaveBeenNthCalledWith(2, "http://localhost:8080/api/v1/auth/password-recovery", expect.objectContaining({
+    expect(fetchMock).toHaveBeenNthCalledWith(2, "/api/auth/password-recovery", expect.objectContaining({
       body: JSON.stringify({ email: "player@squadra.test" }),
     }));
-    expect(fetchMock).toHaveBeenNthCalledWith(3, "http://localhost:8080/api/v1/auth/password-reset", expect.objectContaining({
+    expect(fetchMock).toHaveBeenNthCalledWith(3, "/api/auth/password-reset", expect.objectContaining({
       body: JSON.stringify({ token: "reset-token", password: "a safer password" }),
     }));
   });

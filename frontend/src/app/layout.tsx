@@ -4,7 +4,7 @@ import { Providers } from "@/providers";
 
 export const metadata: Metadata = {
   title: "Squadra",
-  description: "Tournament management for women's football",
+  description: "Gestão de torneios para futebol feminino",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil da Atleta | Squadra - Women's Football</title>
+<!-- Tailwind CSS CDN com plugins de formulários e container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts para tipografia esportiva e dados -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Outfit:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config Customizado -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            squadra: {
+              green: '#16A34A',
+              greenDark: '#15803D',
+              greenLight: '#DCFCE7',
+              purple: '#9333EA',
+              purpleLight: '#F3E8FF',
+              gold: '#FACC15',
+              goldDark: '#CA8A04',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex">
+<!-- BEGIN: LeftSidebar -->
+<!-- Barra lateral fixa de navegação padronizada da plataforma Squadra -->
+<aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between flex-shrink-0 min-h-screen sticky top-0 h-screen z-20">
+<!-- Topo da Sidebar: Logotipo e Navegação Principal -->
+<div class="p-6">
+<!-- Brand Logo -->
+<div class="flex items-center gap-3 mb-8">
+<div class="w-9 h-9 rounded-full bg-squadra-green flex items-center justify-center text-white font-display font-extrabold text-lg shadow-sm">
+          S
+        </div>
+<div>
+<h1 class="font-display font-bold text-lg leading-tight tracking-tight text-slate-900">Squadra</h1>
+<p class="text-xs text-slate-500 font-medium">Women's Football</p>
+</div>
+</div>
+<!-- Links de Navegação -->
+<nav aria-label="Menu Principal" class="space-y-1.5">
+<!-- Item: Home -->
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium text-sm transition-colors group" href="#">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Home</span>
+</a>
+<!-- Item: Teams -->
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium text-sm transition-colors group" href="#">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Teams</span>
+</a>
+<!-- Item: Tournaments -->
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium text-sm transition-colors group" href="#">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Tournaments</span>
+</a>
+<!-- Item: Profile (Ativo) -->
+<a aria-current="page" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-purple-50 text-purple-900 font-semibold text-sm border-l-4 border-squadra-purple transition-all" href="#">
+<svg class="w-5 h-5 text-squadra-purple" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Profile</span>
+</a>
+</nav>
+<!-- Botão Primário de Criar Time -->
+<div class="mt-8">
+<button class="w-full flex items-center justify-center gap-2 bg-squadra-green hover:bg-squadra-greenDark text-white py-2.5 px-4 rounded-xl font-display font-semibold text-sm shadow-sm transition duration-150" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Create Team</span>
+</button>
+</div>
+</div>
+<!-- Rodapé da Sidebar: Configurações e Suporte -->
+<div class="p-6 border-t border-slate-100 space-y-2">
+<a class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium text-sm transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium text-sm transition-colors" href="#">
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<!-- Área principal de visualização do Perfil da Atleta com cabeçalho imersivo e dados estatísticos -->
+<main class="flex-1 overflow-y-auto px-8 py-8 max-w-7xl mx-auto w-full">
+<!-- BEGIN: AthleteHeroCard -->
+<!-- Card principal no estilo scouting report / passaporte da atleta -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+<!-- Banner Esportivo Superior -->
+<div class="h-44 md:h-52 bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 relative flex items-end p-6">
+<!-- Padrão Geométrico / Pitch Lines Decorativas -->
+<div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<div class="absolute right-10 top-0 bottom-0 flex items-center opacity-10 pointer-events-none">
+<svg class="w-96 h-96 text-white" fill="currentColor" viewbox="0 0 200 200">
+<path d="M100,20 C144.18,20 180,55.82 180,100 C180,144.18 144.18,180 100,180 C55.82,180 20,144.18 20,100 C20,55.82 55.82,20 100,20 Z" fill="none" stroke="currentColor" stroke-width="4"></path>
+<line stroke="currentColor" stroke-width="4" x1="20" x2="180" y1="100" y2="100"></line>
+<circle cx="100" cy="100" fill="none" r="30" stroke="currentColor" stroke-width="4"></circle>
+</svg>
+</div>
+<!-- Tag de Temporada Ativa Flutuante -->
+<div class="absolute top-4 right-6 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="text-xs font-semibold uppercase tracking-wider text-emerald-300">Temporada Ativa 2024</span>
+</div>
+</div>
+<!-- Informações Principais da Atleta -->
+<div class="px-8 pb-6 pt-0 relative flex flex-col md:flex-row items-start md:items-end justify-between gap-6 -mt-16">
+<!-- Foto de Perfil e Identificação -->
+<div class="flex items-end gap-5">
+<!-- Avatar da Atleta com borda branca elevada -->
+<div class="relative">
+<img alt="Foto de Perfil de Elena Rodriguez" class="w-28 h-28 md:w-32 md:h-32 rounded-2xl object-cover ring-4 ring-white shadow-md bg-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVE72sWbuqIoZlyMO3YPKxTUIehK7nASYJHZznPAWJFlwCkRada0e5sLH0NhA9BtL1lMsCjoX8ZD7xAmvYyvW4P-LLGYbm2Ig2Gu6HjTxim_nf9ChIprPDpObqtJp-6q_MFBp7FBhUyfjq1AbYx2wx1idbOeNH8iSEyMx4kOdNm0LfTj1jCHGWaL7hI1-yzEne6m0DPgyk7Ln5TTAX2jJ9eJQj2x9m6RYd8mZ3wJHqqv1cXXmbfSTI"/>
+<!-- Número da Camisa Badge -->
+<span class="absolute -bottom-2 -right-2 bg-squadra-purple text-white font-display font-extrabold text-xs px-2.5 py-1 rounded-lg border-2 border-white shadow">
+              #8
+            </span>
+</div>
+<!-- Nome, Cargo e Nível -->
+<div class="mb-1">
+<div class="flex items-center gap-2.5">
+<h2 class="text-2xl md:text-3xl font-display font-extrabold text-slate-900 tracking-tight">Elena Rodriguez</h2>
+<!-- Selo Verificado de Atleta Registrada -->
+<span class="text-squadra-green inline-flex items-center" title="Atleta Registrada e Verificada">
+<svg class="w-6 h-6 fill-current" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
+</svg>
+</span>
+</div>
+<!-- Metadados de Posição, Clube e Categoria -->
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-sm text-slate-600 mt-1 font-medium">
+<span class="font-semibold text-slate-800">Meio-Campista (Armadora)</span>
+<span class="text-slate-300">•</span>
+<span class="flex items-center gap-1.5 text-slate-700">
+<span class="w-2 h-2 rounded-full bg-squadra-purple"></span>
+                Metro Valkyries
+              </span>
+<span class="text-slate-300">•</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                Amador Elite
+              </span>
+</div>
+</div>
+</div>
+<!-- Botões de Ação do Perfil -->
+<div class="flex items-center gap-3 self-end md:self-auto w-full md:w-auto">
+<button class="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-semibold text-sm transition-colors shadow-sm" type="button">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Compartilhar</span>
+</button>
+<button class="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-squadra-purple hover:bg-purple-700 text-white font-semibold text-sm transition-colors shadow-sm" type="button">
+<svg class="w-4 h-4 text-purple-100" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Editar Perfil</span>
+</button>
+</div>
+</div>
+<!-- Barra de Navegação em Abas (Tabs) -->
+<div class="px-8 border-t border-slate-200">
+<nav aria-label="Abas de Perfil" class="flex gap-8 -mb-px">
+<a aria-current="page" class="py-3.5 px-1 border-b-2 border-squadra-purple text-squadra-purple font-display font-bold text-sm" href="#">
+            Visão Geral
+          </a>
+<a class="py-3.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-display font-semibold text-sm transition-colors" href="#">
+            Estatísticas Detalhadas
+          </a>
+<a class="py-3.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-display font-semibold text-sm transition-colors flex items-center gap-1.5" href="#">
+<span>Conquistas</span>
+<span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-bold">4</span>
+</a>
+<a class="py-3.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-display font-semibold text-sm transition-colors" href="#">
+            Histórico de Clubes
+          </a>
+</nav>
+</div>
+</div>
+<!-- END: AthleteHeroCard -->
+<!-- BEGIN: ProfileContentGrid -->
+<!-- Grid estrutural com 3 colunas: 2 para dados/performance e 1 para clubes/conexões -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Coluna Principal (2 colunas de largura em desktops) -->
+<div class="lg:col-span-2 space-y-6">
+<!-- BEGIN: PerformanceStatsCard -->
+<!-- Grade de estatísticas expressivas de desempenho -->
+<section aria-labelledby="heading-stats" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+<div class="flex items-center justify-between mb-5">
+<div>
+<h3 class="font-display font-bold text-lg text-slate-900" id="heading-stats">Estatísticas da Temporada</h3>
+<p class="text-xs text-slate-500">Última atualização após a 14ª Rodada • Liga Amadora</p>
+</div>
+<span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">Ano 2024</span>
+</div>
+<!-- Métricas Chave com Números Grandes -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+<!-- Métrica: Jogos -->
+<div class="bg-slate-50 border border-slate-100 p-4 rounded-xl text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider block mb-1">Partidas</span>
+<span class="font-display font-extrabold text-3xl md:text-4xl text-slate-900">28</span>
+<span class="text-xs text-emerald-600 font-semibold block mt-1">26 como titular</span>
+</div>
+<!-- Métrica: Gols -->
+<div class="bg-amber-50/60 border border-amber-100 p-4 rounded-xl text-center">
+<span class="text-xs font-medium text-amber-800 uppercase tracking-wider block mb-1">Gols Marcados</span>
+<span class="font-display font-extrabold text-3xl md:text-4xl text-amber-600">14</span>
+<span class="text-xs text-amber-700 font-semibold block mt-1">0.50 por jogo</span>
+</div>
+<!-- Métrica: Assistências -->
+<div class="bg-purple-50/60 border border-purple-100 p-4 rounded-xl text-center">
+<span class="text-xs font-medium text-purple-800 uppercase tracking-wider block mb-1">Assistências</span>
+<span class="font-display font-extrabold text-3xl md:text-4xl text-squadra-purple">9</span>
+<span class="text-xs text-purple-700 font-semibold block mt-1">Líder do time</span>
+</div>
+<!-- Métrica: Passes Certos -->
+<div class="bg-slate-50 border border-slate-100 p-4 rounded-xl text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider block mb-1">Precisão de Passe</span>
+<span class="font-display font-extrabold text-3xl md:text-4xl text-slate-900">86%</span>
+<span class="text-xs text-slate-500 block mt-1">540 completos</span>
+</div>
+<!-- Métrica: Desarmes Conquistados -->
+<div class="bg-slate-50 border border-slate-100 p-4 rounded-xl text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider block mb-1">Desarmes</span>
+<span class="font-display font-extrabold text-3xl md:text-4xl text-slate-900">42</span>
+<span class="text-xs text-slate-500 block mt-1">78% de sucesso</span>
+</div>
+<!-- Métrica: Minutos Jogados -->
+<div class="bg-slate-50 border border-slate-100 p-4 rounded-xl text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider block mb-1">Minutos em Campo</span>
+<span class="font-display font-extrabold text-3xl md:text-4xl text-slate-900">2.150'</span>
+<span class="text-xs text-slate-500 block mt-1">92% disponibilidade</span>
+</div>
+</div>
+</section>
+<!-- END: PerformanceStatsCard -->
+<!-- BEGIN: MatchAndFormRow -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card: Próxima Partida Marcada -->
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                  Próximo Jogo
+                </span>
+<span class="text-xs font-medium text-slate-500">Sáb, 24 Out • 14:00</span>
+</div>
+<!-- Confronto de Times -->
+<div class="flex items-center justify-around my-4 text-center">
+<div>
+<div class="w-12 h-12 rounded-full bg-purple-100 text-squadra-purple flex items-center justify-center font-display font-black text-lg mx-auto shadow-inner">
+                    MV
+                  </div>
+<span class="text-xs font-bold text-slate-800 mt-2 block">Metro Valkyries</span>
+<span class="text-[10px] text-slate-400">Mandante</span>
+</div>
+<div class="font-display font-black text-slate-300 text-xl">VS</div>
+<div>
+<div class="w-12 h-12 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-display font-black text-lg mx-auto shadow-inner">
+                    NU
+                  </div>
+<span class="text-xs font-bold text-slate-800 mt-2 block">Northside Utd</span>
+<span class="text-[10px] text-slate-400">Visitante</span>
+</div>
+</div>
+</div>
+<!-- Local e Confirmação de Presença -->
+<div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+<span class="flex items-center gap-1 text-slate-600 truncate">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Arena Riverside
+              </span>
+<span class="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 font-bold">
+                Confirmada ✓
+              </span>
+</div>
+</div>
+<!-- Card: Forma Recente da Atleta -->
+<div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<h4 class="font-display font-bold text-slate-900 text-sm">Forma Recente</h4>
+<span class="text-xs text-slate-500">Últimos 5 jogos</span>
+</div>
+<p class="text-xs text-slate-600 mb-4">Aproveitamento de 80% nos jogos mais recentes da temporada.</p>
+<!-- Badges de V/D/E -->
+<div class="flex items-center gap-2">
+<div class="flex-1 text-center py-2 rounded-lg bg-squadra-green text-white font-bold text-xs shadow-sm">
+                  V
+                </div>
+<div class="flex-1 text-center py-2 rounded-lg bg-squadra-green text-white font-bold text-xs shadow-sm">
+                  V
+                </div>
+<div class="flex-1 text-center py-2 rounded-lg bg-slate-300 text-slate-800 font-bold text-xs shadow-sm">
+                  E
+                </div>
+<div class="flex-1 text-center py-2 rounded-lg bg-red-500 text-white font-bold text-xs shadow-sm">
+                  D
+                </div>
+<div class="flex-1 text-center py-2 rounded-lg bg-squadra-green text-white font-bold text-xs shadow-sm">
+                  V
+                </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+<span>Sequência: 3V - 1E - 1D</span>
+<span class="text-emerald-700 font-medium">Classificado p/ Playoff</span>
+</div>
+</div>
+</div>
+<!-- END: MatchAndFormRow -->
+<!-- BEGIN: TrophyCabinet -->
+<!-- Gabinete de Conquistas, Títulos e Premiações Esportivas -->
+<section aria-labelledby="heading-trophies" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+<div class="flex items-center justify-between mb-5">
+<div class="flex items-center gap-2">
+<h3 class="font-display font-bold text-lg text-slate-900" id="heading-trophies">Galeria de Troféus &amp; Honras</h3>
+<span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">Oficial</span>
+</div>
+<a class="text-xs font-semibold text-squadra-purple hover:underline" href="#">Ver todos (6)</a>
+</div>
+<!-- Vitrine de Troféus em Grid de Cards -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<!-- Troféu 1: MVP da Temporada -->
+<div class="border border-amber-200 bg-gradient-to-b from-amber-50/70 to-white rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+<div class="w-14 h-14 mx-auto mb-3 rounded-full bg-amber-100 flex items-center justify-center text-amber-500 ring-4 ring-amber-50">
+<svg class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+</svg>
+</div>
+<h5 class="font-display font-bold text-xs text-slate-900 leading-tight">MVP da Liga</h5>
+<p class="text-[11px] text-amber-800 font-medium mt-1">Liga Miga 2024</p>
+</div>
+<!-- Troféu 2: Artilheira -->
+<div class="border border-amber-200 bg-gradient-to-b from-amber-50/70 to-white rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+<div class="w-14 h-14 mx-auto mb-3 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 ring-4 ring-amber-50">
+<svg class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24">
+<path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"></path>
+</svg>
+</div>
+<h5 class="font-display font-bold text-xs text-slate-900 leading-tight">Artilheira do Torneio</h5>
+<p class="text-[11px] text-amber-800 font-medium mt-1">Copa Delas SP</p>
+</div>
+<!-- Troféu 3: Campeã do Torneio -->
+<div class="border border-slate-200 bg-slate-50/50 rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+<div class="w-14 h-14 mx-auto mb-3 rounded-full bg-emerald-100 flex items-center justify-center text-squadra-green ring-4 ring-emerald-50">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h5 class="font-display font-bold text-xs text-slate-900 leading-tight">Campeã Regional</h5>
+<p class="text-[11px] text-slate-500 font-medium mt-1">Temporada 2023</p>
+</div>
+<!-- Troféu 4: Hat-Trick Hero -->
+<div class="border border-slate-200 bg-slate-50/50 rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+<div class="w-14 h-14 mx-auto mb-3 rounded-full bg-purple-100 flex items-center justify-center text-squadra-purple ring-4 ring-purple-50">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h5 class="font-display font-bold text-xs text-slate-900 leading-tight">Hat-Trick Hero</h5>
+<p class="text-[11px] text-slate-500 font-medium mt-1">3 gols vs East Enders</p>
+</div>
+</div>
+</section>
+<!-- END: TrophyCabinet -->
+</div>
+<!-- Coluna Direita (Times, Histórico e Redes) -->
+<div class="space-y-6">
+<!-- BEGIN: CurrentTeamsCard -->
+<!-- Times Atuais em que a atleta atua -->
+<section aria-labelledby="heading-teams" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+<h3 class="font-display font-bold text-lg text-slate-900 mb-4" id="heading-teams">Times Atuais</h3>
+<div class="space-y-3">
+<!-- Time 1 (Principal) -->
+<div class="p-3.5 rounded-xl border border-purple-100 bg-purple-50/40 flex items-center justify-between hover:border-purple-300 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-squadra-purple text-white flex items-center justify-center font-display font-black text-sm">
+                  MV
+                </div>
+<div>
+<div class="flex items-center gap-1.5">
+<h5 class="font-display font-bold text-sm text-slate-900 leading-none">Metro Valkyries</h5>
+<span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-1.5 py-0.5 rounded">Principal</span>
+</div>
+<p class="text-xs text-slate-500 mt-1">Titular • Camisa #8</p>
+</div>
+</div>
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Time 2 (Society / Secundário) -->
+<div class="p-3.5 rounded-xl border border-slate-200 bg-white flex items-center justify-between hover:border-slate-300 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-display font-black text-sm">
+                  SB
+                </div>
+<div>
+<h5 class="font-display font-bold text-sm text-slate-900 leading-none">Sunday Ballers FC</h5>
+<p class="text-xs text-slate-500 mt-1">Futebol 7 • Meia-Atacante</p>
+</div>
+</div>
+<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- END: CurrentTeamsCard -->
+<!-- BEGIN: SportsHistoryCard -->
+<!-- Histórico e Trajetória de Clubes -->
+<section aria-labelledby="heading-history" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+<h3 class="font-display font-bold text-lg text-slate-900 mb-4" id="heading-history">Trajetória Esportiva</h3>
+<div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+<!-- Ponto 1: Temporada Atual -->
+<div class="relative">
+<span class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-squadra-purple ring-4 ring-purple-100"></span>
+<span class="text-xs font-semibold text-squadra-purple">2023 — Presente</span>
+<h5 class="font-display font-bold text-sm text-slate-900 mt-0.5">Metro Valkyries</h5>
+<p class="text-xs text-slate-500 mt-0.5">14 Gols, 9 Assistências, Campeã Regional da Capital.</p>
+</div>
+<!-- Ponto 2: Clube Anterior -->
+<div class="relative">
+<span class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-slate-300 ring-4 ring-slate-100"></span>
+<span class="text-xs font-medium text-slate-500">2022 — 2023</span>
+<h5 class="font-display font-bold text-sm text-slate-800 mt-0.5">Estrelas Futebol Clube</h5>
+<p class="text-xs text-slate-500 mt-0.5">18 Jogos disputados, Vice-campeã da Taça Prata.</p>
+</div>
+<!-- Ponto 3: Início de Carreira Amadora -->
+<div class="relative">
+<span class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-slate-300 ring-4 ring-slate-100"></span>
+<span class="text-xs font-medium text-slate-500">2021 — 2022</span>
+<h5 class="font-display font-bold text-sm text-slate-800 mt-0.5">Aurora WFC (Sub-20)</h5>
+<p class="text-xs text-slate-500 mt-0.5">Revelação do Torneio Universitário Metropolitano.</p>
+</div>
+</div>
+</section>
+<!-- END: SportsHistoryCard -->
+<!-- BEGIN: SocialLinksCard -->
+<!-- Presença Digital e Redes Sociais da Atleta -->
+<section aria-labelledby="heading-social" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+<h3 class="font-display font-bold text-base text-slate-900 mb-3" id="heading-social">Redes &amp; Conexões</h3>
+<p class="text-xs text-slate-500 mb-4">Acompanhe os bastidores e os melhores lances de treinos e jogos.</p>
+<div class="flex items-center gap-3">
+<!-- Link Instagram -->
+<a class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors" href="#" title="Instagram">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+</svg>
+</a>
+<!-- Link Twitter/X -->
+<a class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors" href="#" title="Twitter / X">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+</svg>
+</a>
+<!-- Link LinkedIn / Carreira -->
+<a class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors" href="#" title="LinkedIn">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+</svg>
+</a>
+</div>
+</section>
+<!-- END: SocialLinksCard -->
+</div>
+</div>
+<!-- END: ProfileContentGrid -->
+</main>
+<!-- END: MainContent -->
+</body></html>

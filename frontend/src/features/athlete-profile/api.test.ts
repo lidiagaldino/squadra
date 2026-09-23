@@ -3,7 +3,7 @@ import { athleteProfileApi, AthleteProfileApiError } from "./api";
 
 describe("athleteProfileApi", () => {
   const fetchMock = vi.fn();
-  const auth = { accessToken: "expired", refresh: vi.fn() };
+  const auth = { refresh: vi.fn() };
 
   beforeEach(() => {
     fetchMock.mockReset();
@@ -11,15 +11,14 @@ describe("athleteProfileApi", () => {
     vi.stubGlobal("fetch", fetchMock);
   });
 
-  it("loads the authenticated athlete profile with the access token", async () => {
+  it("loads the authenticated athlete profile through the BFF", async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify(profile()), { status: 200 }));
 
     await expect(athleteProfileApi.getProfile(auth)).resolves.toMatchObject({ displayName: "Marta" });
 
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/athletes/me/profile", expect.objectContaining({
+    expect(fetchMock).toHaveBeenCalledWith("/api/athletes/me/profile", expect.objectContaining({
       method: "GET",
       credentials: "include",
-      headers: expect.objectContaining({ Authorization: "Bearer expired" }),
     }));
   });
 
@@ -27,17 +26,6 @@ describe("athleteProfileApi", () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({ code: "PROFILE_NOT_FOUND" }), { status: 404 }));
 
     await expect(athleteProfileApi.getProfile(auth)).resolves.toBeNull();
-  });
-
-  it("refreshes before loading when no access token is in memory", async () => {
-    fetchMock.mockResolvedValue(new Response(JSON.stringify(profile()), { status: 200 }));
-
-    await expect(athleteProfileApi.getProfile({ accessToken: null, refresh: auth.refresh })).resolves.toMatchObject({ displayName: "Marta" });
-
-    expect(auth.refresh).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/athletes/me/profile", expect.objectContaining({
-      headers: expect.objectContaining({ Authorization: "Bearer fresh" }),
-    }));
   });
 
   it("refreshes once and retries after a 401", async () => {
@@ -48,9 +36,7 @@ describe("athleteProfileApi", () => {
     await expect(athleteProfileApi.getProfile(auth)).resolves.toMatchObject({ displayName: "Marta" });
 
     expect(auth.refresh).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenNthCalledWith(2, "http://localhost:8080/api/v1/athletes/me/profile", expect.objectContaining({
-      headers: expect.objectContaining({ Authorization: "Bearer fresh" }),
-    }));
+    expect(fetchMock).toHaveBeenNthCalledWith(2, "/api/athletes/me/profile", expect.objectContaining({ credentials: "include" }));
   });
 
   it("throws a safe error when recovery fails", async () => {
@@ -63,7 +49,7 @@ describe("athleteProfileApi", () => {
       primaryPosition: "FORWARD",
       secondaryPositions: [],
     })).rejects.toMatchObject({
-      message: "We could not save your athlete profile. Please try again.",
+      message: "Não foi possível salvar seu perfil de atleta. Tente novamente.",
       status: 403,
     } satisfies Partial<AthleteProfileApiError>);
   });
@@ -79,7 +65,7 @@ describe("athleteProfileApi", () => {
       jerseyNumber: 10,
     });
 
-    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8080/api/v1/athletes/me/profile", expect.objectContaining({
+    expect(fetchMock).toHaveBeenCalledWith("/api/athletes/me/profile", expect.objectContaining({
       method: "PUT",
       body: JSON.stringify({
         displayName: "Marta",

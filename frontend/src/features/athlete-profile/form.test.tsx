@@ -25,7 +25,7 @@ describe("AthleteProfileForm", () => {
 
     renderProfileForm();
 
-    expect(await screen.findByText(/create your athlete profile/i)).toBeInTheDocument();
+    expect(await screen.findByText(/crie seu perfil de atleta/i)).toBeInTheDocument();
   });
 
   it("loads existing values and saves edits without reloading the page", async () => {
@@ -35,11 +35,11 @@ describe("AthleteProfileForm", () => {
     renderProfileForm();
 
     expect(await screen.findByDisplayValue("Marta")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Rainha" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save profile" }));
+    fireEvent.change(screen.getByLabelText("Nome de exibição"), { target: { value: "Rainha" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar perfil" }));
 
     await waitFor(() => expect(api.saveProfile).toHaveBeenCalledWith(auth, expect.objectContaining({ displayName: "Rainha" })));
-    expect(await screen.findByRole("status", { name: "" })).toHaveTextContent("Profile saved.");
+    expect(await screen.findByRole("status", { name: "" })).toHaveTextContent("Perfil salvo.");
   });
 
   it("updates the kit preview from loaded and edited profile values", async () => {
@@ -49,16 +49,16 @@ describe("AthleteProfileForm", () => {
 
     expect(await screen.findByText("Marta")).toBeInTheDocument();
     expect(screen.getByText("#10")).toBeInTheDocument();
-    expect(screen.getByText("Forward • Left foot")).toBeInTheDocument();
+    expect(screen.getByText("Atacante • Pé esquerdo")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Rainha" } });
-    fireEvent.change(screen.getByLabelText("Main position"), { target: { value: "MIDFIELDER" } });
-    fireEvent.change(screen.getByLabelText("Dominant foot"), { target: { value: "BOTH" } });
-    fireEvent.change(screen.getByLabelText("Jersey number"), { target: { value: "8" } });
+    fireEvent.change(screen.getByLabelText("Nome de exibição"), { target: { value: "Rainha" } });
+    fireEvent.change(screen.getByLabelText("Posição principal"), { target: { value: "MIDFIELDER" } });
+    fireEvent.change(screen.getByLabelText("Pé dominante"), { target: { value: "BOTH" } });
+    fireEvent.change(screen.getByLabelText("Número da camisa"), { target: { value: "8" } });
 
     expect(screen.getByText("Rainha")).toBeInTheDocument();
     expect(screen.getByText("#8")).toBeInTheDocument();
-    expect(screen.getByText("Midfielder • Both feet")).toBeInTheDocument();
+    expect(screen.getByText("Meio-campista • Ambos os pés")).toBeInTheDocument();
   });
 
   it("loads minimal profile values with optional fields empty", async () => {
@@ -81,8 +81,8 @@ describe("AthleteProfileForm", () => {
     renderProfileForm();
 
     expect(await screen.findByDisplayValue("Marta")).toBeInTheDocument();
-    expect(screen.getByLabelText("Full name")).toHaveValue("");
-    expect(screen.getByLabelText("Jersey number")).toHaveValue(null);
+    expect(screen.getByLabelText("Nome completo")).toHaveValue("");
+    expect(screen.getByLabelText("Número da camisa")).toHaveValue(null);
   });
 
   it("validates profile values before saving", async () => {
@@ -90,10 +90,10 @@ describe("AthleteProfileForm", () => {
 
     renderProfileForm();
 
-    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "M" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save profile" }));
+    fireEvent.change(screen.getByLabelText("Nome de exibição"), { target: { value: "M" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar perfil" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Use at least 2 characters.");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Use pelo menos 2 caracteres.");
     expect(api.saveProfile).not.toHaveBeenCalled();
   });
 
@@ -102,13 +102,13 @@ describe("AthleteProfileForm", () => {
 
     renderProfileForm();
 
-    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Marta" } });
-    fireEvent.change(screen.getByLabelText("Birth date"), { target: { value: "2999-01-01" } });
-    fireEvent.click(screen.getByLabelText("Forward"));
-    fireEvent.click(screen.getByRole("button", { name: "Save profile" }));
+    fireEvent.change(screen.getByLabelText("Nome de exibição"), { target: { value: "Marta" } });
+    fireEvent.change(screen.getByLabelText("Data de nascimento"), { target: { value: "2999-01-01" } });
+    fireEvent.click(screen.getByLabelText("Atacante"));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar perfil" }));
 
-    expect(await screen.findByText("Birth date cannot be in the future.")).toBeInTheDocument();
-    expect(screen.getByText("Secondary positions cannot include your main position.")).toBeInTheDocument();
+    expect(await screen.findByText("A data de nascimento não pode estar no futuro.")).toBeInTheDocument();
+    expect(screen.getByText("As posições secundárias não podem incluir sua posição principal.")).toBeInTheDocument();
     expect(api.saveProfile).not.toHaveBeenCalled();
   });
 
@@ -117,7 +117,7 @@ describe("AthleteProfileForm", () => {
 
     renderProfileForm();
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("We could not load your athlete profile.");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível carregar seu perfil de atleta.");
   });
 
   it("keeps typed values when saving fails", async () => {
@@ -126,10 +126,10 @@ describe("AthleteProfileForm", () => {
 
     renderProfileForm();
 
-    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Marta" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save profile" }));
+    fireEvent.change(screen.getByLabelText("Nome de exibição"), { target: { value: "Marta" } });
+    fireEvent.click(screen.getByRole("button", { name: "Salvar perfil" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("We could not save your athlete profile.");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível salvar seu perfil de atleta.");
     expect(screen.getByDisplayValue("Marta")).toBeInTheDocument();
   });
 

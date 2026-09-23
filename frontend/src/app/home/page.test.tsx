@@ -27,10 +27,12 @@ describe("AuthenticatedHomePage", () => {
     auth.user = { id: "organizer-1", email: "organizer@squadra.test", role: "ORGANIZER" };
     render(<AuthenticatedHomePage />);
 
-    expect(screen.getByRole("heading", { name: /good match day, organizer/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /requires attention/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("href", "/organizer/profile");
-    expect(screen.getByText(/registrations need review/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /bom dia de jogo, organizer/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /precisa de atenção/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("href", "/organizer/profile");
+    expect(screen.getByRole("link", { name: "Torneios" })).toHaveAttribute("href", "/tournaments");
+    expect(screen.getByRole("link", { name: /criar torneio/i })).toHaveAttribute("href", "/tournaments");
+    expect(screen.getAllByText(/12 inscrições pendentes/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/your next match is set/i)).not.toBeInTheDocument();
   });
 
@@ -38,10 +40,11 @@ describe("AuthenticatedHomePage", () => {
     auth.user = { id: "athlete-1", email: "athlete@squadra.test", role: "ATHLETE" };
     render(<AuthenticatedHomePage />);
 
-    expect(screen.getByRole("heading", { name: /athlete, your next match is set/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("href", "/athlete/profile");
-    expect(screen.getByText(/Estrelas FC vs Aurora/i)).toBeInTheDocument();
-    expect(screen.getByText(/Confirm your team invitation/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /bem-vinda de volta, elena/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("href", "/athlete/profile");
+    expect(screen.queryByRole("link", { name: "Torneios" })).not.toBeInTheDocument();
+    expect(screen.getAllByText(/City Valkyries vs Northside Utd/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/conquista desbloqueada/i)).toBeInTheDocument();
     expect(screen.queryByText(/payment issue in Adulto B/i)).not.toBeInTheDocument();
   });
 
@@ -50,7 +53,7 @@ describe("AuthenticatedHomePage", () => {
     auth.logout.mockResolvedValue(undefined);
     render(<AuthenticatedHomePage />);
 
-    fireEvent.click(screen.getByRole("button", { name: /sign out/i }));
+    fireEvent.click(screen.getByRole("button", { name: /sair/i }));
 
     await waitFor(() => expect(auth.logout).toHaveBeenCalledOnce());
     expect(push).toHaveBeenCalledWith("/login");
@@ -60,7 +63,7 @@ describe("AuthenticatedHomePage", () => {
     auth.refresh.mockRejectedValue(new Error("expired"));
     render(<AuthenticatedHomePage />);
 
-    await waitFor(() => expect(screen.getByRole("heading", { name: /sign in to see your home/i })).toBeInTheDocument());
-    expect(screen.getByRole("link", { name: /sign in/i })).toHaveAttribute("href", "/login");
+    await waitFor(() => expect(screen.getByRole("heading", { name: /entre para ver seu início/i })).toBeInTheDocument());
+    expect(screen.getByRole("link", { name: /entrar/i })).toHaveAttribute("href", "/login");
   });
 });

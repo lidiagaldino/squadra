@@ -30,12 +30,10 @@ export class OrganizerProfileApiError extends Error {
 }
 
 type AuthSession = {
-  accessToken: string | null;
-  refresh(): Promise<string>;
+  refresh(): Promise<unknown>;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
-const profileUrl = `${apiBaseUrl}/api/v1/organizers/me/profile`;
+const profileUrl = "/api/organizers/me/profile";
 
 export const organizerProfileApi = {
   getProfile: (auth: AuthSession) => authorizedRequest<OrganizerProfile | null>("GET", auth),
@@ -43,12 +41,11 @@ export const organizerProfileApi = {
 };
 
 async function authorizedRequest<T>(method: "GET" | "PUT", auth: AuthSession, body?: unknown): Promise<T> {
-  let token = auth.accessToken ?? await auth.refresh();
-  let response = await request(method, token, body);
+  let response = await request(method, body);
 
   if (response.status === 401) {
-    token = await auth.refresh();
-    response = await request(method, token, body);
+    await auth.refresh();
+    response = await request(method, body);
   }
 
   if (method === "GET" && response.status === 404) {
@@ -56,20 +53,17 @@ async function authorizedRequest<T>(method: "GET" | "PUT", auth: AuthSession, bo
   }
 
   if (!response.ok) {
-    throw new OrganizerProfileApiError("We could not save your organization profile. Please try again.", response.status);
+    throw new OrganizerProfileApiError("Não foi possível salvar o perfil da organização. Tente novamente.", response.status);
   }
 
   return response.json() as Promise<T>;
 }
 
-function request(method: "GET" | "PUT", accessToken: string, body?: unknown) {
+function request(method: "GET" | "PUT", body?: unknown) {
   return fetch(profileUrl, {
     method,
     credentials: "include",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      ...(body ? { "Content-Type": "application/json" } : {}),
-    },
+    headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
 }

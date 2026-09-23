@@ -8,18 +8,18 @@ import { z } from "zod";
 import { useAuth } from "@/features/auth/auth-context";
 import { organizerProfileApi, type OrganizerProfile, type OrganizerProfileInput } from "./api";
 
-const optionalHttpUrl = z.string().trim().max(200, "Use at most 200 characters.")
-  .refine((value) => !value || value.startsWith("http://") || value.startsWith("https://"), "Use an http:// or https:// website.");
+const optionalHttpUrl = z.string().trim().max(200, "Use no máximo 200 caracteres.")
+  .refine((value) => !value || value.startsWith("http://") || value.startsWith("https://"), "Use um site com http:// ou https://.");
 
 const organizerProfileSchema = z.object({
-  organizationName: z.string().trim().min(2, "Use at least 2 characters.").max(100, "Use at most 100 characters."),
-  contactName: z.string().trim().min(2, "Use at least 2 characters.").max(100, "Use at most 100 characters."),
-  contactEmail: z.string().trim().email("Enter a valid email address.").max(320, "Use at most 320 characters."),
-  phone: z.string().trim().max(30, "Use at most 30 characters.").optional(),
-  city: z.string().trim().min(2, "Use at least 2 characters.").max(80, "Use at most 80 characters."),
-  state: z.string().trim().min(2, "Use at least 2 characters.").max(80, "Use at most 80 characters."),
+  organizationName: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(100, "Use no máximo 100 caracteres."),
+  contactName: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(100, "Use no máximo 100 caracteres."),
+  contactEmail: z.string().trim().email("Informe um e-mail válido.").max(320, "Use no máximo 320 caracteres."),
+  phone: z.string().trim().max(30, "Use no máximo 30 caracteres.").optional(),
+  city: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(80, "Use no máximo 80 caracteres."),
+  state: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(80, "Use no máximo 80 caracteres."),
   website: optionalHttpUrl.optional(),
-  description: z.string().trim().max(500, "Use at most 500 characters.").optional(),
+  description: z.string().trim().max(500, "Use no máximo 500 caracteres.").optional(),
 });
 
 type ProfileFormValues = z.infer<typeof organizerProfileSchema>;
@@ -60,13 +60,13 @@ export function OrganizerProfileForm() {
     mutationFn: (values: OrganizerProfileInput) => organizerProfileApi.saveProfile(auth, values),
     onSuccess: (profile) => {
       setError(null);
-      setStatus("Organization profile saved.");
+      setStatus("Perfil da organização salvo.");
       queryClient.setQueryData(["organizer-profile"], profile);
       form.reset(valuesFromProfile(profile));
     },
     onError: () => {
       setStatus(null);
-      setError("We could not save your organization profile. Please try again.");
+      setError("Não foi possível salvar o perfil da organização. Tente novamente.");
     },
   });
 
@@ -80,38 +80,38 @@ export function OrganizerProfileForm() {
     <section className="profile-shell organizer-profile-shell" aria-labelledby="organizer-profile-title">
       <div className="profile-hero organizer-profile-hero">
         <div>
-          <p className="eyebrow">Organizer profile</p>
-          <h1 id="organizer-profile-title">Set your tournament identity.</h1>
-          <p>Keep the official organization details ready for registrations, tournament pages and participant contact.</p>
+          <p className="eyebrow">Perfil da organizadora</p>
+          <h1 id="organizer-profile-title">Defina a identidade dos seus torneios.</h1>
+          <p>Mantenha os dados oficiais da organização prontos para inscrições, páginas de torneio e contato com participantes.</p>
         </div>
-        <div className="profile-kit organizer-kit" aria-label="Organization preview">
-          <span>{preview.city && preview.state ? `${preview.city}, ${preview.state}` : "Tournament organizer"}</span>
-          <strong>{preview.organizationName.trim() || "Your organization"}</strong>
-          <small>{preview.contactEmail.trim() || "Contact email not set"}</small>
+        <div className="profile-kit organizer-kit" aria-label="Prévia da organização">
+          <span>{preview.city && preview.state ? `${preview.city}, ${preview.state}` : "Organizadora de torneios"}</span>
+          <strong>{preview.organizationName.trim() || "Sua organização"}</strong>
+          <small>{preview.contactEmail.trim() || "E-mail de contato não informado"}</small>
         </div>
       </div>
 
       <div className="profile-status-strip">
-        {query.isPending && <p role="status">Loading your organization profile...</p>}
-        {query.isError && <p className="form-error" role="alert">We could not load your organization profile.</p>}
-        {query.data === null && <p role="status">Create your organization profile before publishing tournament information.</p>}
+        {query.isPending && <p role="status">Carregando o perfil da organização...</p>}
+        {query.isError && <p className="form-error" role="alert">Não foi possível carregar o perfil da organização.</p>}
+        {query.data === null && <p role="status">Crie o perfil da organização antes de publicar informações de torneios.</p>}
       </div>
 
       <form className="profile-form" onSubmit={submit} noValidate>
         <div className="profile-form-main">
           <section className="profile-section" aria-labelledby="organization-section">
             <div className="section-heading">
-              <p className="eyebrow">Organization</p>
-              <h2 id="organization-section">What appears beside your tournaments</h2>
+              <p className="eyebrow">Organização</p>
+              <h2 id="organization-section">O que aparece junto dos seus torneios</h2>
             </div>
             <div className="field-grid">
-              <Field label="Organization name" error={form.formState.errors.organizationName?.message}>
+              <Field label="Nome da organização" error={form.formState.errors.organizationName?.message}>
                 <input autoComplete="organization" {...form.register("organizationName")} />
               </Field>
-              <Field label="City" error={form.formState.errors.city?.message}>
+              <Field label="Cidade" error={form.formState.errors.city?.message}>
                 <input autoComplete="address-level2" {...form.register("city")} />
               </Field>
-              <Field label="State" error={form.formState.errors.state?.message}>
+              <Field label="Estado" error={form.formState.errors.state?.message}>
                 <input autoComplete="address-level1" {...form.register("state")} />
               </Field>
             </div>
@@ -119,17 +119,17 @@ export function OrganizerProfileForm() {
 
           <section className="profile-section" aria-labelledby="contact-section">
             <div className="section-heading">
-              <p className="eyebrow">Contact</p>
-              <h2 id="contact-section">How teams reach you</h2>
+              <p className="eyebrow">Contato</p>
+              <h2 id="contact-section">Como os times falam com você</h2>
             </div>
             <div className="field-grid">
-              <Field label="Contact name" error={form.formState.errors.contactName?.message}>
+              <Field label="Nome de contato" error={form.formState.errors.contactName?.message}>
                 <input autoComplete="name" {...form.register("contactName")} />
               </Field>
-              <Field label="Contact email" error={form.formState.errors.contactEmail?.message}>
+              <Field label="E-mail de contato" error={form.formState.errors.contactEmail?.message}>
                 <input autoComplete="email" type="email" {...form.register("contactEmail")} />
               </Field>
-              <Field label="Phone" error={form.formState.errors.phone?.message}>
+              <Field label="Telefone" error={form.formState.errors.phone?.message}>
                 <input autoComplete="tel" {...form.register("phone")} />
               </Field>
             </div>
@@ -137,29 +137,29 @@ export function OrganizerProfileForm() {
 
           <section className="profile-section" aria-labelledby="details-section">
             <div className="section-heading">
-              <p className="eyebrow">Tournament context</p>
-              <h2 id="details-section">Information teams can trust</h2>
+              <p className="eyebrow">Contexto do torneio</p>
+              <h2 id="details-section">Informações em que os times podem confiar</h2>
             </div>
-            <Field label="Website" error={form.formState.errors.website?.message}>
+            <Field label="Site" error={form.formState.errors.website?.message}>
               <input autoComplete="url" type="url" {...form.register("website")} />
             </Field>
-            <Field label="Description" error={form.formState.errors.description?.message}>
+            <Field label="Descrição" error={form.formState.errors.description?.message}>
               <textarea rows={5} {...form.register("description")} />
             </Field>
           </section>
         </div>
 
-        <aside className="profile-aside" aria-label="Organization profile readiness">
-          <p className="eyebrow">Ready for operations</p>
-          <h2>Complete organization details make every tournament feel official.</h2>
+        <aside className="profile-aside" aria-label="Prontidão do perfil da organização">
+          <p className="eyebrow">Pronta para operar</p>
+          <h2>Dados completos da organização deixam todo torneio com cara oficial.</h2>
           <ul>
-            <li>Name and location identify who runs the event.</li>
-            <li>Contact details help teams resolve registration questions.</li>
-            <li>This profile can support tournament pages as those features arrive.</li>
+            <li>Nome e localização identificam quem conduz o evento.</li>
+            <li>Dados de contato ajudam times a resolver dúvidas de inscrição.</li>
+            <li>Este perfil poderá apoiar páginas de torneio conforme os recursos chegarem.</li>
           </ul>
           {error && <p className="form-error" role="alert">{error}</p>}
           {status && <p role="status">{status}</p>}
-          <button disabled={mutation.isPending}>{mutation.isPending ? "Saving..." : "Save organization"}</button>
+          <button disabled={mutation.isPending}>{mutation.isPending ? "Salvando..." : "Salvar organização"}</button>
         </aside>
       </form>
     </section>

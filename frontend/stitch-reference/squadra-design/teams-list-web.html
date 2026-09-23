@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Squadra - Teams</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#bdcaba",
+                        "primary-container": "#00873a",
+                        "secondary-container": "#9e41f5",
+                        "on-tertiary-container": "#4e3e00",
+                        "on-primary-fixed-variant": "#005320",
+                        "tertiary": "#735c00",
+                        "on-background": "#131b2e",
+                        "on-primary-container": "#f7fff2",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#faf8ff",
+                        "background": "#faf8ff",
+                        "primary-fixed": "#7ffc97",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-surface-variant": "#3e4a3d",
+                        "inverse-primary": "#62df7d",
+                        "surface-container": "#eaedff",
+                        "secondary": "#831ada",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#2c0051",
+                        "secondary-fixed-dim": "#ddb8ff",
+                        "tertiary-fixed-dim": "#eec200",
+                        "secondary-fixed": "#f0dbff",
+                        "surface-variant": "#dae2fd",
+                        "primary": "#006b2c",
+                        "surface-container-low": "#f2f3ff",
+                        "tertiary-container": "#cea700",
+                        "surface-dim": "#d2d9f4",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#6e7b6c",
+                        "on-primary-fixed": "#002109",
+                        "surface-tint": "#006e2d",
+                        "surface-container-high": "#e2e7ff",
+                        "tertiary-fixed": "#ffe083",
+                        "on-surface": "#131b2e",
+                        "on-secondary-container": "#fffbff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#dae2fd",
+                        "on-error-container": "#93000a",
+                        "surface": "#faf8ff",
+                        "inverse-surface": "#283044",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-secondary-fixed-variant": "#6800b4",
+                        "primary-fixed-dim": "#62df7d",
+                        "on-tertiary-fixed-variant": "#574500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xl": "40px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Outfit", "sans-serif"],
+                        "display-lg-mobile": ["Outfit", "sans-serif"],
+                        "stats-number": ["Outfit", "sans-serif"],
+                        "display-lg": ["Outfit", "sans-serif"],
+                        "headline-lg-mobile": ["Outfit", "sans-serif"],
+                        "label-bold": ["Inter", "sans-serif"],
+                        "headline-lg": ["Outfit", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "stats-number": ["40px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-bold": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-full flex font-body-md">
+<!-- Top Navigation (Mobile/Tablet) -->
+<nav class="md:hidden bg-surface-container-lowest text-primary font-headline-md flex justify-between items-center w-full px-lg h-16 sticky top-0 z-50 border-b border-outline-variant flat no shadows transition-all duration-200 ease-in-out">
+<div class="font-headline-md text-headline-md font-bold text-primary">Squadra</div>
+<div class="flex gap-4">
+<button class="hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</nav>
+<!-- Side Navigation (Desktop) -->
+<nav class="hidden md:flex flex-col py-xl px-md gap-sm bg-surface-container-lowest fixed left-0 top-0 h-full w-[280px] border-r border-outline-variant flat no shadows scale-98 active:scale-95 transition-transform">
+<div class="px-4 mb-8">
+<div class="font-headline-md text-headline-md font-bold text-primary">Squadra</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Women's Football</div>
+</div>
+<div class="flex flex-col gap-2 font-label-bold text-label-bold flex-grow">
+<a class="flex items-center gap-3 py-3 px-4 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 py-3 pl-4 pr-4 text-primary font-bold border-l-4 border-primary bg-surface-container-low rounded-r-lg" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Teams
+            </a>
+<a class="flex items-center gap-3 py-3 px-4 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="emoji_events">emoji_events</span>
+                Tournaments
+            </a>
+<a class="flex items-center gap-3 py-3 px-4 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+                Profile
+            </a>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-bold text-label-bold py-3 rounded-lg hover:bg-surface-tint transition-colors mb-6 shadow-sm">
+            Create Team
+        </button>
+<div class="flex flex-col gap-2 font-label-bold text-label-bold border-t border-outline-variant pt-4">
+<a class="flex items-center gap-3 py-2 px-4 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 py-2 px-4 text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] p-gutter md:p-xl overflow-y-auto">
+<div class="max-w-container-max mx-auto">
+<header class="mb-xl">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background">My Teams</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Manage your squads, accept invites, or start a new club.</p>
+</header>
+<!-- Team Invitations Banner -->
+<section class="mb-xl">
+<h2 class="font-headline-md text-headline-md text-on-background mb-md">Invitations</h2>
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-lg flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<img class="w-16 h-16 rounded-full border border-outline-variant object-cover" data-alt="A stylized vector crest of a fictional women's football team featuring a roaring lioness in deep purple and gold, flat lighting, clean professional vector art style, modern sports branding aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoqoUNO1k1Cp5Zc3nO4X8bnUxbTPOD15qmkplEVQ8S1GR53GgfBq0kU3CxEtBtfaqt0yB1tVJC2F4N5ionwGxvPHxRL56WmhhPaXfiKkPFFT6Ub0kkbLtZq0I9ySG4IlYUrrx59H9hB6c_3os4vZGhMHgm7Jz9cbLEnNh6M8A-zOXhaQnDfm2GkOj9aAKoNJ9gwqlKtEysZksjX_RWFHHHbzP9A4C1jCURoroE8MCm-V5ankDB7fvS"/>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-background">Northside Valkyries</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Invited by Sarah Jenkins • Forward Role</p>
+</div>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-2 bg-surface-container-lowest text-on-background border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-colors">Decline</button>
+<button class="flex-1 md:flex-none px-6 py-2 bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:bg-surface-tint transition-colors">Accept Invite</button>
+</div>
+</div>
+</section>
+<!-- Teams Grid -->
+<section>
+<h2 class="font-headline-md text-headline-md text-on-background mb-md">Active Squads</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Create New Team Card -->
+<button class="group h-full min-h-[240px] flex flex-col items-center justify-center bg-surface-container-lowest border-2 border-dashed border-outline-variant rounded-xl hover:border-primary hover:bg-surface-container-low transition-all duration-300">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors mb-4">
+<span class="material-symbols-outlined text-[32px]" data-icon="add">add</span>
+</div>
+<span class="font-label-bold text-label-bold text-on-background group-hover:text-primary">Create New Team</span>
+</button>
+<!-- Team Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-[0px_4px_20px_rgba(15,23,42,0.05)] transition-shadow duration-300 flex flex-col relative group">
+<div class="h-24 bg-surface-variant relative">
+<!-- Abstract pattern background for header -->
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(#831ada_1px,transparent_1px)] [background-size:16px_16px]"></div>
+</div>
+<div class="px-6 pb-6 pt-0 relative flex-1 flex flex-col">
+<img class="w-20 h-20 rounded-full border-4 border-surface-container-lowest object-cover absolute -top-10 bg-surface-container-lowest shadow-sm" data-alt="A modern, minimalist football team crest logo featuring a stylized lightning bolt intersecting a classic football, bold slate and primary green colors, clean vector design, professional sports aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUKdNw-9oByTK6JyT6-T6VwMYEX8KlOKd_E_-gpBXHnWVVp_jA8_QKPyE0DZBu9rW_Vm731hNQ7bTuBIlb6y5gd4aA1VXDUpi7Po22ZjHWGQMy7mYHtw-cOQlCxs1SPHy3ABNemPq5n8qrY_WYzdm5l_5KGn-5S8r9mc8vMV0p7FduiZ-RKpSHciWCGd-dYl4AP9H8oGC-Qi9-3J1YNqLNtDumN-lQREwwxlRf3hKLey8UiLEHLynG"/>
+<div class="mt-12">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-on-background">Metro United WFC</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Central Division • League A</p>
+<div class="flex gap-4 mt-auto border-t border-surface-variant pt-4">
+<div>
+<div class="font-label-bold text-label-bold text-on-surface-variant uppercase text-xs">Role</div>
+<div class="font-body-md text-body-md font-semibold">Midfielder</div>
+</div>
+<div>
+<div class="font-label-bold text-label-bold text-on-surface-variant uppercase text-xs">Members</div>
+<div class="font-body-md text-body-md font-semibold">24</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Team Card 2 (Captain) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-[0px_4px_20px_rgba(15,23,42,0.05)] transition-shadow duration-300 flex flex-col relative group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-secondary-container z-10"></div>
+<div class="h-24 bg-surface-variant relative">
+<!-- Abstract pattern background for header -->
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(#006b2c_1px,transparent_1px)] [background-size:16px_16px]"></div>
+</div>
+<div class="px-6 pb-6 pt-0 relative flex-1 flex flex-col ml-1.5">
+<img class="w-20 h-20 rounded-full border-4 border-surface-container-lowest object-cover absolute -top-10 bg-surface-container-lowest shadow-sm" data-alt="A striking sports crest featuring an anchor and a football, rendered in navy blue and bright achievement gold, clean lines, professional modern sports team logo style on a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW1wwNudijhX8cX2sAdctFUrnHtO3hhyXKiYRfF57bFTtNPl-GmowyJblbZMnD7RBnHj8l_371-pJXv5sDWmK4YHf0UvuvZ7plrWKkUaxNUMr7d9GA3145M0p2SMA6ceKz2wgsI98TwKGVMAA_buxHp3htaCyvmFCEmX2WzSZqD2IsfrvQLoAO8Ng2e4aOj3Tcom8zRDGf6QIZTAKt5D0V5s5dGEL1vqq5VFLRkFiZPqLI1SdlN_F9"/>
+<div class="mt-12">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-on-background">Harbor City FC</h3>
+<span class="bg-tertiary-container text-on-tertiary-container text-xs px-2 py-1 rounded font-label-bold uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="star">star</span>
+                                        Captain
+                                    </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Coastal Sunday League</p>
+<div class="flex gap-4 mt-auto border-t border-surface-variant pt-4">
+<div>
+<div class="font-label-bold text-label-bold text-on-surface-variant uppercase text-xs">Role</div>
+<div class="font-body-md text-body-md font-semibold">Defender</div>
+</div>
+<div>
+<div class="font-label-bold text-label-bold text-on-surface-variant uppercase text-xs">Members</div>
+<div class="font-body-md text-body-md font-semibold">18</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

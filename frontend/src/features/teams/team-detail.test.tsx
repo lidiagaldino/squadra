@@ -34,23 +34,23 @@ describe("TeamDetailScreen", () => {
     renderWithClient(<TeamDetailScreen teamId="team-1" />);
 
     expect(await screen.findByRole("heading", { name: "Liga Miga" })).toBeInTheDocument();
-    expect(screen.getByLabelText(/team name/i)).toBeEnabled();
-    expect(screen.getByRole("heading", { name: /team administration/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /join roster as athlete/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/nome do time/i)).toBeEnabled();
+    expect(screen.getByRole("heading", { name: /admins do time/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /entrar no elenco como atleta/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /join roster as athlete/i }));
+    fireEvent.click(screen.getByRole("button", { name: /entrar no elenco como atleta/i }));
     await waitFor(() => expect(teamsApi.joinAsAthlete).toHaveBeenCalled());
 
-    fireEvent.change(screen.getByLabelText(/invite athlete/i), { target: { value: "new-athlete@test" } });
-    fireEvent.click(screen.getAllByRole("button", { name: /submit/i })[0]);
+    fireEvent.change(screen.getByLabelText(/convidar atleta/i), { target: { value: "new-athlete@test" } });
+    fireEvent.click(screen.getAllByRole("button", { name: /enviar/i })[0]);
     await waitFor(() => expect(teamsApi.inviteAthlete).toHaveBeenCalled());
 
-    fireEvent.change(screen.getByLabelText(/assign admin/i), { target: { value: "new-admin@test" } });
-    fireEvent.click(screen.getAllByRole("button", { name: /submit/i })[1]);
+    fireEvent.change(screen.getByLabelText(/atribuir admin/i), { target: { value: "new-admin@test" } });
+    fireEvent.click(screen.getAllByRole("button", { name: /enviar/i })[1]);
     await waitFor(() => expect(teamsApi.assignAdmin).toHaveBeenCalled());
 
-    fireEvent.change(screen.getByLabelText(/transfer ownership/i), { target: { value: "admin-1" } });
-    fireEvent.click(screen.getByRole("button", { name: /transfer ownership/i }));
+    fireEvent.change(screen.getByLabelText(/transferir titularidade/i), { target: { value: "admin-1" } });
+    fireEvent.click(screen.getByRole("button", { name: /transferir titularidade/i }));
     await waitFor(() => expect(teamsApi.transferOwnership).toHaveBeenCalled());
   });
 
@@ -59,11 +59,11 @@ describe("TeamDetailScreen", () => {
 
     renderWithClient(<TeamDetailScreen teamId="team-1" />);
 
-    expect(await screen.findByRole("heading", { name: /this is a pending invitation/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /accept/i })).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: /team administration/i })).not.toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /este convite está pendente/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /aceitar/i })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /admins do time/i })).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /accept/i }));
+    fireEvent.click(screen.getByRole("button", { name: /aceitar/i }));
     await waitFor(() => expect(teamsApi.acceptInvitation).toHaveBeenCalled());
   });
 
