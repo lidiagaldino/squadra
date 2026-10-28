@@ -105,7 +105,7 @@ public final class TournamentsResource {
     private static TournamentService.SaveTournamentCommand command(TournamentRequests.SaveTournament request) {
         return new TournamentService.SaveTournamentCommand(request.name(), request.description(), request.city(),
                 request.state(), request.venueName(), request.startDate(), request.endDate(),
-                request.registrationDeadline(), request.rules());
+                request.registrationDeadline(), request.rules(), request.visibility());
     }
 
     private static AccessTokenVerifier.VerifiedAccessToken currentUser(ContainerRequestContext request) {
@@ -119,7 +119,7 @@ public final class TournamentsResource {
                 tournament.venueName(), date(tournament.startDate()), date(tournament.endDate()),
                 date(tournament.registrationDeadline()), tournament.rules(), summary.categoryCount(),
                 instant(tournament.publishedAt()), instant(tournament.closedAt()), instant(tournament.cancelledAt()),
-                instant(tournament.createdAt()), instant(tournament.updatedAt()));
+                instant(tournament.createdAt()), instant(tournament.updatedAt()), tournament.visibility());
     }
 
     private static TournamentResponses.TournamentDetails details(TournamentRepository.TournamentDetails details) {
@@ -129,7 +129,7 @@ public final class TournamentsResource {
                 tournament.venueName(), date(tournament.startDate()), date(tournament.endDate()),
                 date(tournament.registrationDeadline()), tournament.rules(), details.categoryCount(),
                 instant(tournament.publishedAt()), instant(tournament.closedAt()), instant(tournament.cancelledAt()),
-                instant(tournament.createdAt()), instant(tournament.updatedAt()));
+                instant(tournament.createdAt()), instant(tournament.updatedAt()), tournament.visibility());
     }
 
     private static String date(LocalDate date) {

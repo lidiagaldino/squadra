@@ -1,6 +1,7 @@
 package com.squadra.platform.domain.entities;
 
 import com.squadra.platform.domain.enums.TournamentStatus;
+import com.squadra.platform.domain.enums.TournamentVisibility;
 import com.squadra.platform.domain.exceptions.TournamentConflictException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public final class Tournament {
     private final UUID ownerOrganizerUserId;
     private final Instant createdAt;
     private TournamentStatus status;
+    private TournamentVisibility visibility;
     private String name;
     private String description;
     private String city;
@@ -26,11 +28,12 @@ public final class Tournament {
     private Instant cancelledAt;
     private Instant updatedAt;
 
-    public Tournament(UUID id, UUID ownerOrganizerUserId, TournamentStatus status, SaveFields fields,
+    public Tournament(UUID id, UUID ownerOrganizerUserId, TournamentStatus status, TournamentVisibility visibility, SaveFields fields,
             Instant publishedAt, Instant closedAt, Instant cancelledAt, Instant createdAt, Instant updatedAt) {
         this.id = Objects.requireNonNull(id, "id is required");
         this.ownerOrganizerUserId = Objects.requireNonNull(ownerOrganizerUserId, "ownerOrganizerUserId is required");
         this.status = Objects.requireNonNull(status, "status is required");
+        this.visibility = Objects.requireNonNull(visibility, "visibility is required");
         this.publishedAt = publishedAt;
         this.closedAt = closedAt;
         this.cancelledAt = cancelledAt;
@@ -39,13 +42,17 @@ public final class Tournament {
     }
 
     public static Tournament create(UUID ownerOrganizerUserId, SaveFields fields, Instant now) {
-        return new Tournament(UUID.randomUUID(), ownerOrganizerUserId, TournamentStatus.DRAFT, fields, null, null, null,
+        return new Tournament(UUID.randomUUID(), ownerOrganizerUserId, TournamentStatus.DRAFT,
+                fields.visibility() == null ? TournamentVisibility.PUBLIC : fields.visibility(), fields, null, null, null,
                 now, now);
     }
 
     public void update(SaveFields fields, Instant now) {
         if (status == TournamentStatus.CANCELLED) {
             throw new TournamentConflictException("Cancelled tournaments cannot be edited");
+        }
+        if (fields.visibility() != null && status != TournamentStatus.DRAFT && fields.visibility() != visibility) {
+            throw new TournamentConflictException("Tournament visibility cannot change after publication");
         }
         apply(fields, now);
     }
@@ -82,6 +89,7 @@ public final class Tournament {
     public UUID id() { return id; }
     public UUID ownerOrganizerUserId() { return ownerOrganizerUserId; }
     public TournamentStatus status() { return status; }
+    public TournamentVisibility visibility() { return visibility; }
     public String name() { return name; }
     public String description() { return description; }
     public String city() { return city; }
@@ -119,6 +127,7 @@ public final class Tournament {
         this.endDate = normalizedEndDate;
         this.registrationDeadline = normalizedRegistrationDeadline;
         this.rules = optionalText(fields.rules(), "rules", 5000);
+        if (fields.visibility() != null) this.visibility = fields.visibility();
         this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt is required");
     }
 
@@ -146,5 +155,6 @@ public final class Tournament {
     }
 
     public record SaveFields(String name, String description, String city, String state, String venueName,
-            LocalDate startDate, LocalDate endDate, LocalDate registrationDeadline, String rules) { }
+            LocalDate startDate, LocalDate endDate, LocalDate registrationDeadline, String rules,
+            TournamentVisibility visibility) { }
 }

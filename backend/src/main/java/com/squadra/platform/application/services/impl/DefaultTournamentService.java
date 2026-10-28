@@ -93,7 +93,8 @@ public final class DefaultTournamentService implements TournamentService {
     private static Tournament.SaveFields fields(SaveTournamentCommand command) {
         Objects.requireNonNull(command, "command is required");
         return new Tournament.SaveFields(command.name(), command.description(), command.city(), command.state(),
-                command.venueName(), command.startDate(), command.endDate(), command.registrationDeadline(), command.rules());
+                command.venueName(), command.startDate(), command.endDate(), command.registrationDeadline(), command.rules(),
+                command.visibility());
     }
 
     private static void log(String action, UUID ownerId, UUID tournamentId) {

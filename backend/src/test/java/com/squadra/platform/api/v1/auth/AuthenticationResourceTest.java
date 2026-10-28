@@ -173,9 +173,9 @@ class AuthenticationResourceTest {
             statement.setObject(1, UUID.randomUUID());
             statement.setObject(2, userId);
             statement.setString(3, sha256(rawToken));
-            statement.setObject(4, now.plusSeconds(1_800));
+            statement.setObject(4, now.plusSeconds(1_800).atOffset(java.time.ZoneOffset.UTC));
             statement.setObject(5, null);
-            statement.setObject(6, now);
+            statement.setObject(6, now.atOffset(java.time.ZoneOffset.UTC));
             statement.executeUpdate();
         }
     }

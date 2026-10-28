@@ -1,6 +1,7 @@
 package com.squadra.platform.application.services.interfaces;
 
 import com.squadra.platform.domain.repositories.TournamentRepository;
+import com.squadra.platform.domain.enums.TournamentVisibility;
 import io.smallrye.mutiny.Uni;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,5 +18,6 @@ public interface TournamentService {
     Uni<TournamentRepository.TournamentDetails> cancel(UUID userId, UUID tournamentId);
 
     record SaveTournamentCommand(String name, String description, String city, String state, String venueName,
-            LocalDate startDate, LocalDate endDate, LocalDate registrationDeadline, String rules) { }
+            LocalDate startDate, LocalDate endDate, LocalDate registrationDeadline, String rules,
+            TournamentVisibility visibility) { }
 }

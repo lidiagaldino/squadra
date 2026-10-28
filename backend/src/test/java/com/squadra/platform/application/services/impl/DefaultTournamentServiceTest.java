@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.squadra.platform.application.services.interfaces.TournamentService;
 import com.squadra.platform.domain.entities.Tournament;
 import com.squadra.platform.domain.enums.TournamentStatus;
+import com.squadra.platform.domain.enums.TournamentVisibility;
 import com.squadra.platform.domain.exceptions.TournamentConflictException;
 import com.squadra.platform.domain.exceptions.TournamentNotFoundException;
 import com.squadra.platform.domain.repositories.TournamentRepository;
@@ -101,7 +102,7 @@ class DefaultTournamentServiceTest {
     private static TournamentService.SaveTournamentCommand command(String name) {
         return new TournamentService.SaveTournamentCommand(name, "Women's football tournament.", "Sao Paulo", "SP",
                 "Arena Central", LocalDate.parse("2026-10-10"), LocalDate.parse("2026-10-12"),
-                LocalDate.parse("2026-10-01"), "Standard rules.");
+                LocalDate.parse("2026-10-01"), "Standard rules.", TournamentVisibility.PUBLIC);
     }
 
     private static final class InMemoryTournamentRepository implements TournamentRepository {
@@ -123,6 +124,18 @@ class DefaultTournamentServiceTest {
             }
             return Uni.createFrom().item(summaries);
         }
+
+        @Override
+        public Uni<Optional<TournamentDetails>> findById(UUID tournamentId) {
+            Tournament tournament = tournaments.get(tournamentId);
+            return Uni.createFrom().item(tournament == null ? Optional.empty() : Optional.of(new TournamentDetails(tournament, 0)));
+        }
+
+        @Override
+        public Uni<List<TournamentSummary>> listAvailable(int limit, int offset) { return Uni.createFrom().item(List.of()); }
+
+        @Override
+        public Uni<Optional<TournamentDetails>> findPublicOpen(UUID tournamentId) { return findById(tournamentId); }
 
         @Override
         public Uni<Optional<TournamentDetails>> findOwnedByOrganizer(UUID tournamentId, UUID ownerOrganizerUserId) {

@@ -9,6 +9,9 @@ import java.util.UUID;
 public interface TournamentRepository {
     Uni<TournamentDetails> create(Tournament tournament);
     Uni<List<TournamentSummary>> listForOwner(UUID ownerOrganizerUserId);
+    Uni<Optional<TournamentDetails>> findById(UUID tournamentId);
+    Uni<List<TournamentSummary>> listAvailable(int limit, int offset);
+    Uni<Optional<TournamentDetails>> findPublicOpen(UUID tournamentId);
     Uni<Optional<TournamentDetails>> findOwnedByOrganizer(UUID tournamentId, UUID ownerOrganizerUserId);
     Uni<TournamentDetails> save(Tournament tournament);
 

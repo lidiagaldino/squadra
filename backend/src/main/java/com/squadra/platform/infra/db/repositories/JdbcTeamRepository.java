@@ -68,6 +68,40 @@ public final class JdbcTeamRepository extends ReactiveJdbcSupport implements Tea
     }
 
     @Override
+    public Uni<List<TeamDirectorySummary>> searchDirectory(String query, int limit, int offset) {
+        return blockingDatabaseCall(dataSource -> {
+            String sql = """
+                    SELECT id, name, city, state
+                    FROM squadra.teams
+                    WHERE lower(name) LIKE lower(?)
+                    ORDER BY name ASC, id ASC
+                    LIMIT ? OFFSET ?
+                    """;
+            try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement(sql)) {
+                statement.setString(1, "%" + query.replace("%", "\\%").replace("_", "\\_") + "%");
+                statement.setInt(2, limit);
+                statement.setInt(3, offset);
+                try (var result = statement.executeQuery()) {
+                    List<TeamDirectorySummary> teams = new ArrayList<>();
+                    while (result.next()) teams.add(new TeamDirectorySummary(result.getObject("id", UUID.class),
+                            result.getString("name"), result.getString("city"), result.getString("state")));
+                    return teams;
+                }
+            }
+        });
+    }
+
+    @Override
+    public Uni<Boolean> directoryTeamExists(UUID teamId) {
+        return blockingDatabaseCall(dataSource -> {
+            try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement("SELECT 1 FROM squadra.teams WHERE id = ?")) {
+                statement.setObject(1, teamId);
+                try (var result = statement.executeQuery()) { return result.next(); }
+            }
+        });
+    }
+
+    @Override
     public Uni<Optional<TeamDetails>> findVisibleToUser(UUID teamId, UUID userId) {
         return blockingDatabaseCall(dataSource -> {
             try (var connection = dataSource.getConnection()) {

@@ -220,6 +220,16 @@ class DefaultTeamServiceTest {
         }
 
         @Override
+        public Uni<List<TeamDirectorySummary>> searchDirectory(String query, int limit, int offset) {
+            return Uni.createFrom().item(List.of());
+        }
+
+        @Override
+        public Uni<Boolean> directoryTeamExists(UUID teamId) {
+            return Uni.createFrom().item(teams.containsKey(teamId));
+        }
+
+        @Override
         public Uni<Optional<TeamDetails>> findVisibleToUser(UUID teamId, UUID userId) {
             return Uni.createFrom().item(details(teamId, userId));
         }

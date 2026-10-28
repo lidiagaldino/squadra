@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.squadra.platform.domain.enums.TournamentStatus;
+import com.squadra.platform.domain.enums.TournamentVisibility;
 import com.squadra.platform.domain.exceptions.TournamentConflictException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ class TournamentTest {
 
         assertEquals(ownerId, tournament.ownerOrganizerUserId());
         assertEquals(TournamentStatus.DRAFT, tournament.status());
+        assertEquals(TournamentVisibility.PUBLIC, tournament.visibility());
         assertEquals("Copa Squadra", tournament.name());
         assertEquals("Sao Paulo", tournament.city());
         assertEquals("SP", tournament.state());
@@ -74,6 +76,10 @@ class TournamentTest {
 
         tournament.publish(NOW.plusSeconds(1));
         assertThrows(TournamentConflictException.class, () -> tournament.publish(NOW.plusSeconds(2)));
+        assertThrows(TournamentConflictException.class, () -> tournament.update(
+                new Tournament.SaveFields("Copa Squadra", null, "Sao Paulo", "SP", "Arena Central",
+                        LocalDate.parse("2026-10-10"), LocalDate.parse("2026-10-12"),
+                        LocalDate.parse("2026-10-01"), null, TournamentVisibility.PRIVATE), NOW.plusSeconds(3)));
     }
 
     @Test
@@ -94,6 +100,6 @@ class TournamentTest {
     private static Tournament.SaveFields fields(String name, String city, String state, String venueName,
             String startDate, String endDate, String registrationDeadline, String description, String rules) {
         return new Tournament.SaveFields(name, description, city, state, venueName, LocalDate.parse(startDate),
-                LocalDate.parse(endDate), LocalDate.parse(registrationDeadline), rules);
+                LocalDate.parse(endDate), LocalDate.parse(registrationDeadline), rules, null);
     }
 }

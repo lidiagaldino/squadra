@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface TeamRepository {
     Uni<TeamDetails> createWithOwner(Team team, TeamAdministrator owner);
     Uni<List<TeamSummary>> listForUser(UUID userId);
+    Uni<List<TeamDirectorySummary>> searchDirectory(String query, int limit, int offset);
+    Uni<Boolean> directoryTeamExists(UUID teamId);
     Uni<Optional<TeamDetails>> findVisibleToUser(UUID teamId, UUID userId);
     Uni<TeamDetails> saveTeam(Team team, UUID viewerUserId);
     Uni<TeamDetails> upsertAdmin(UUID teamId, UUID userId, TeamAdminRole role, UUID viewerUserId);
@@ -25,6 +27,8 @@ public interface TeamRepository {
 
     record TeamSummary(Team team, TeamAdminRole administrationRole,
             TeamAthleteMembershipStatus athleteMembershipStatus) { }
+
+    record TeamDirectorySummary(UUID id, String name, String city, String state) { }
 
     record TeamDetails(Team team, TeamAdminRole administrationRole,
             TeamAthleteMembershipStatus athleteMembershipStatus, List<AdminView> administrators,
