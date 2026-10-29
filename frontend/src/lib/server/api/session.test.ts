@@ -101,6 +101,9 @@ describe("server BFF session API", () => {
     expect(safeError(500).status).toBe(500);
     expect(jsonResponse({ ok: false, status: 404 }).status).toBe(404);
     expect(jsonResponse({ ok: true, status: 200, data: { ok: true }, accessToken: "access" }).status).toBe(200);
+    const noContent = jsonResponse({ ok: true, status: 204, data: undefined, accessToken: "access" });
+    expect(noContent.status).toBe(204);
+    expect(noContent.headers.getSetCookie().join("; ")).toContain("squadra_access_token=access");
   });
 
   it("sets and clears HttpOnly session cookies at the BFF boundary", () => {

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { tournamentsApi, TournamentsApiError } from "./api";
+import { categoryLabel, formatPriceInCents, registrationStatusLabel, tournamentsApi, TournamentsApiError } from "./api";
 
 describe("tournamentsApi", () => {
   const fetchMock = vi.fn();
@@ -62,6 +62,55 @@ describe("tournamentsApi", () => {
     expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/cancel", expect.objectContaining({ method: "POST" }));
   });
 
+  it("manages category endpoints and helper labels", async () => {
+    fetchMock
+      .mockResolvedValueOnce(new Response(JSON.stringify([category()]), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(category()), { status: 201 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ ...category(), name: "Intermediário" }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(null, { status: 204 }));
+
+    await expect(tournamentsApi.listCategories(auth, "tour-1")).resolves.toMatchObject([{ name: "Iniciante" }]);
+    await expect(tournamentsApi.createCategory(auth, "tour-1", categoryInput())).resolves.toMatchObject({ name: "Iniciante" });
+    await expect(tournamentsApi.updateCategory(auth, "tour-1", "cat-1", { ...categoryInput(), name: "Intermediário" })).resolves.toMatchObject({ name: "Intermediário" });
+    await expect(tournamentsApi.deleteCategory(auth, "tour-1", "cat-1")).resolves.toBeUndefined();
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/categories", expect.objectContaining({ method: "GET" }));
+    expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/categories", expect.objectContaining({ method: "POST" }));
+    expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/categories/cat-1", expect.objectContaining({ method: "PUT" }));
+    expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/categories/cat-1", expect.objectContaining({ method: "DELETE" }));
+    expect(categoryLabel("GROUP_STAGE")).toBe("Fase de grupos");
+    expect(categoryLabel("UNKNOWN")).toBe("UNKNOWN");
+    expect(formatPriceInCents(12500)).toBe("R$ 125,00");
+  });
+
+  it("keeps swiss rounds only for swiss category payloads", async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify(category({ competitionFormat: "SWISS", swissRounds: 5 })), { status: 201 }));
+
+    await tournamentsApi.createCategory(auth, "tour-1", { ...categoryInput(), competitionFormat: "SWISS", swissRounds: 5 });
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({
+      competitionFormat: "SWISS",
+      swissRounds: 5,
+    });
+  });
+
+  it("manages category team registrations through tournament endpoints", async () => {
+    fetchMock
+      .mockResolvedValueOnce(new Response(JSON.stringify([registration()]), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(registration()), { status: 201 }));
+
+    await expect(tournamentsApi.listCategoryRegistrations(auth, "tour-1", "cat-1")).resolves.toMatchObject([{ teamName: "Liga Miga" }]);
+    await expect(tournamentsApi.registerTeam(auth, "tour-1", "cat-1", "team-1")).resolves.toMatchObject({ status: "DRAFT" });
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/categories/cat-1/registrations", expect.objectContaining({ method: "GET" }));
+    expect(fetchMock).toHaveBeenCalledWith("/api/tournaments/tour-1/categories/cat-1/registrations", expect.objectContaining({
+      method: "POST",
+      body: JSON.stringify({ teamId: "team-1" }),
+    }));
+    expect(registrationStatusLabel("WAITING_PAYMENT")).toBe("Aguardando pagamento");
+    expect(registrationStatusLabel("UNKNOWN")).toBe("UNKNOWN");
+  });
+
   it("throws safe errors when recovery fails", async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({ code: "TOURNAMENT_NOT_FOUND" }), { status: 404 }));
 
@@ -95,6 +144,51 @@ describe("tournamentsApi", () => {
       publishedAt: null,
       closedAt: null,
       cancelledAt: null,
+      createdAt: "2026-08-29T10:00:00Z",
+      updatedAt: "2026-08-29T10:00:00Z",
+    };
+  }
+
+  function categoryInput() {
+    return {
+      name: "Iniciante",
+      modality: "FUTSAL" as const,
+      minAthletes: 7,
+      maxAthletes: 12,
+      minTeams: 4,
+      maxTeams: 16,
+      paymentModel: "TEAM" as const,
+      priceInCents: 12500,
+      competitionFormat: "GROUP_STAGE" as const,
+      swissRounds: null,
+      matchDurationMinutes: 40,
+      intervalBetweenMatchesMinutes: 10,
+      minimumRestMinutes: 60,
+      schedulingStrategy: "BALANCED_REST" as const,
+    };
+  }
+
+  function category(overrides = {}) {
+    return {
+      ...categoryInput(),
+      id: "cat-1",
+      tournamentId: "tour-1",
+      createdAt: "2026-08-29T10:00:00Z",
+      updatedAt: "2026-08-29T10:00:00Z",
+      ...overrides,
+    };
+  }
+
+  function registration() {
+    return {
+      id: "reg-1",
+      teamId: "team-1",
+      teamName: "Liga Miga",
+      tournamentId: "tour-1",
+      tournamentName: "Copa Squadra",
+      categoryId: "cat-1",
+      categoryName: "Iniciante",
+      status: "DRAFT",
       createdAt: "2026-08-29T10:00:00Z",
       updatedAt: "2026-08-29T10:00:00Z",
     };

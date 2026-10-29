@@ -77,6 +77,11 @@ export function sessionFromAccessToken(accessToken: string): AuthenticatedUser |
 
 export function jsonResponse<T>(result: BackendResult<T>, fallbackStatus = 500) {
   if (!result.ok) return safeError(result.status || fallbackStatus);
+  if (result.status === 204) {
+    const response = new NextResponse(null, { status: 204 });
+    applyAuthCookies(response, result.accessToken, result.refreshToken);
+    return response;
+  }
   const response = NextResponse.json(result.data, { status: result.status });
   applyAuthCookies(response, result.accessToken, result.refreshToken);
   return response;

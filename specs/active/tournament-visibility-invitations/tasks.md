@@ -118,7 +118,7 @@ T5 -> T6 -> T7 -> T8
 
 ### T6: Add frontend API and BFF contracts
 
-**Status**: Pending
+**Status**: Complete
 
 **What**: Add typed visibility, discovery, directory, and invitation clients plus authenticated BFF proxy routes.
 **Where**: `frontend/src/features/`; `frontend/src/app/api/`
