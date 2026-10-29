@@ -24,28 +24,46 @@ public final class JdbcTournamentInvitationRepository extends ReactiveJdbcSuppor
     @Override
     public Uni<InvitationDetails> create(TournamentInvitation invitation) {
         return blockingDatabaseCall(dataSource -> {
-            try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement("""
-                    INSERT INTO squadra.tournament_invitations (
-                        id, tournament_id, category_id, team_id, inviter_user_id, status, pending_key, created_at, updated_at, decided_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """)) {
-                statement.setObject(1, invitation.id());
-                statement.setObject(2, invitation.tournamentId());
-                statement.setObject(3, invitation.categoryId());
-                statement.setObject(4, invitation.teamId());
-                statement.setObject(5, invitation.inviterUserId());
-                statement.setString(6, invitation.status().name());
-                statement.setBoolean(7, true);
-                setInstant(statement, 8, invitation.createdAt());
-                setInstant(statement, 9, invitation.updatedAt());
-                setInstant(statement, 10, invitation.decidedAt());
+            try (var connection = dataSource.getConnection()) {
+                connection.setAutoCommit(false);
                 try {
-                    statement.executeUpdate();
-                } catch (SQLException exception) {
-                    if ("23505".equals(exception.getSQLState())) throw new TournamentInvitationConflictException("A pending invitation already exists");
+                    // Acceptance and public registrations use the same category lock.
+                    // Recheck inside this transaction: the service precheck can become stale.
+                    JdbcTeamRegistrationRepository.requireCategoryLock(connection, invitation.categoryId());
+                    try (var active = connection.prepareStatement("SELECT 1 FROM squadra.tournament_registrations WHERE category_id = ? AND team_id = ? AND active_key = TRUE")) {
+                        active.setObject(1, invitation.categoryId());
+                        active.setObject(2, invitation.teamId());
+                        try (var result = active.executeQuery()) {
+                            if (result.next()) throw new TournamentInvitationConflictException("Team already has an active registration");
+                        }
+                    }
+                    try (var statement = connection.prepareStatement("""
+                            INSERT INTO squadra.tournament_invitations (
+                                id, tournament_id, category_id, team_id, inviter_user_id, status, pending_key, created_at, updated_at, decided_at
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            """)) {
+                        statement.setObject(1, invitation.id());
+                        statement.setObject(2, invitation.tournamentId());
+                        statement.setObject(3, invitation.categoryId());
+                        statement.setObject(4, invitation.teamId());
+                        statement.setObject(5, invitation.inviterUserId());
+                        statement.setString(6, invitation.status().name());
+                        statement.setBoolean(7, true);
+                        setInstant(statement, 8, invitation.createdAt());
+                        setInstant(statement, 9, invitation.updatedAt());
+                        setInstant(statement, 10, invitation.decidedAt());
+                        statement.executeUpdate();
+                    }
+                    InvitationDetails details = find(connection, invitation.id()).orElseThrow(TournamentInvitationNotFoundException::new);
+                    connection.commit();
+                    return details;
+                } catch (Exception exception) {
+                    connection.rollback();
+                    if (exception instanceof SQLException sql && "23505".equals(sql.getSQLState())) {
+                        throw new TournamentInvitationConflictException("A pending invitation already exists");
+                    }
                     throw exception;
                 }
-                return find(connection, invitation.id()).orElseThrow(TournamentInvitationNotFoundException::new);
             }
         });
     }

@@ -162,3 +162,11 @@ T5 -> T6 -> T7 -> T8
 | Task granularity | Pass: each task has one main deliverable and a local verification gate. |
 | Diagram/dependencies | Pass: T1 through T8 form the same linear chain in both diagrams and fields. |
 | Test co-location | Pass: domain/service/API/frontend changes carry tests; migration paths are checked by integration tests. |
+
+## Independent review follow-up
+
+The verifier requested explicit evidence for field minimization, bounded discovery,
+team inbox isolation, TEAM_ADMIN decisions, visibility persistence, and competing
+invitation decisions. Regression tests cover those outcomes. Creation now repeats
+the active-registration guard while holding the category lock, preventing stale
+service checks during concurrent acceptance.

@@ -50,7 +50,7 @@ flowchart LR
 - `TournamentInvitation` stores ID, tournament/category/team IDs, inviter user ID, status, created/updated/decided timestamps.
 - States: `PENDING`, `ACCEPTED`, `REJECTED`, `CANCELLED`; only `PENDING` can transition.
 - Add `V10__create_tournament_invitations.sql` with FKs, status check, a nullable pending marker constrained by status, and a unique `(category_id, team_id, pending_key)` constraint. This allows only one pending invite while preserving multiple terminal history rows on PostgreSQL and H2.
-- Invitation history is preserved; no hard delete.
+- Invitation history is preserved; no hard delete. Creation locks the category and rechecks active registration inside the insert transaction, preventing a new pending invitation from racing acceptance of the previous invitation.
 - Add `TournamentInvitationRepository` and an adapter under `infra/db/repositories`. Returned read models include team, tournament, and category display names only.
 
 ### Capacity and Transaction Boundary
