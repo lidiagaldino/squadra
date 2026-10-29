@@ -8,7 +8,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useAuth } from "@/features/auth/auth-context";
-import { teamsApi, TeamsApiError, type TeamDetails, type TeamInput } from "./api";
+import { registrationStatusLabel, teamsApi, TeamsApiError, type TeamDetails, type TeamInput } from "./api";
+import { TeamTournamentInvitations } from "@/features/tournaments/invitations";
 import { TeamShell } from "./team-shell";
 
 const teamSchema = z.object({
@@ -29,6 +30,7 @@ export function TeamDetailScreen({ teamId }: Readonly<{ teamId: string }>) {
   const [athleteEmail, setAthleteEmail] = useState("");
   const [ownerTarget, setOwnerTarget] = useState("");
   const query = useQuery({ queryKey: ["team", teamId], queryFn: () => teamsApi.get(auth, teamId), retry: false });
+  const registrationsQuery = useQuery({ queryKey: ["team-registrations", teamId], queryFn: () => teamsApi.listRegistrations(auth, teamId), retry: false });
   const form = useForm<TeamFormValues>({ resolver: zodResolver(teamSchema), defaultValues: emptyValues });
 
   useEffect(() => {
@@ -50,6 +52,15 @@ export function TeamDetailScreen({ teamId }: Readonly<{ teamId: string }>) {
   const transfer = useMutation({ mutationFn: () => teamsApi.transferOwnership(auth, teamId, ownerTarget), onSuccess: setTeam });
   const accept = useMutation({ mutationFn: () => teamsApi.acceptInvitation(auth, teamId), onSuccess: setTeam });
   const reject = useMutation({ mutationFn: () => teamsApi.rejectInvitation(auth, teamId), onSuccess: () => queryClient.invalidateQueries({ queryKey: ["teams"] }) });
+  const cancelRegistration = useMutation({
+    mutationFn: (registrationId: string) => teamsApi.cancelRegistration(auth, teamId, registrationId),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["team-registrations", teamId] }),
+        queryClient.invalidateQueries({ queryKey: ["team-registrations-summary"] }),
+      ]);
+    },
+  });
   const action = useTeamAction(teamId, setTeam);
 
   const team = query.data;
@@ -97,6 +108,7 @@ export function TeamDetailScreen({ teamId }: Readonly<{ teamId: string }>) {
           )}
 
           <section className="team-detail-grid">
+            {canEdit && <TeamTournamentInvitations teamId={teamId} />}
             <form className="team-panel" onSubmit={submit} noValidate>
               <div className="section-heading"><p className="eyebrow">Configurações do time</p><h2>Informações permanentes</h2></div>
               <Field label="Nome do time" error={form.formState.errors.name?.message}><input disabled={!canEdit} {...form.register("name")} /></Field>
@@ -121,6 +133,31 @@ export function TeamDetailScreen({ teamId }: Readonly<{ teamId: string }>) {
                 <button onClick={() => join.mutate()} disabled={join.isPending}>{join.isPending ? "Entrando..." : "Entrar no elenco como atleta"}</button>
               )}
               {join.isError && <p className="form-error" role="alert">Apenas contas de atleta podem entrar em um elenco.</p>}
+            </section>
+
+            <section className="team-panel">
+              <div className="section-heading"><p className="eyebrow">Torneios</p><h2>Inscrições do time</h2></div>
+              {registrationsQuery.isPending && <p role="status">Carregando inscrições...</p>}
+              {registrationsQuery.isError && <p className="form-error" role="alert">Não foi possível carregar as inscrições.</p>}
+              {registrationsQuery.data?.length === 0 && <p>Este time ainda não está inscrito em uma categoria.</p>}
+              {(registrationsQuery.data?.length ?? 0) > 0 && (
+                <div className="registration-list team-registration-list">
+                  {registrationsQuery.data?.map((registration) => (
+                    <article key={registration.id}>
+                      <div>
+                        <strong>{registration.tournamentName}</strong>
+                        <span>{registration.categoryName} · {registrationStatusLabel(registration.status)}</span>
+                      </div>
+                      {canEdit && registration.status === "DRAFT" && (
+                        <button type="button" className="secondary-button" onClick={() => cancelRegistration.mutate(registration.id)} disabled={cancelRegistration.isPending}>
+                          Cancelar inscrição
+                        </button>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              )}
+              {cancelRegistration.isError && <p className="form-error" role="alert">Não foi possível cancelar a inscrição.</p>}
             </section>
 
             <section className="team-panel">

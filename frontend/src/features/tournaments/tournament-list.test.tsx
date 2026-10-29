@@ -12,6 +12,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 describe("TournamentListScreen", () => {
   beforeEach(() => {
+    vi.spyOn(tournamentsApi, "available").mockResolvedValue([]);
     vi.spyOn(tournamentsApi, "list").mockResolvedValue([]);
     vi.spyOn(tournamentsApi, "create").mockResolvedValue(tournament());
   });

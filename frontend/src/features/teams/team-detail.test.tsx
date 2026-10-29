@@ -12,6 +12,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 describe("TeamDetailScreen", () => {
   beforeEach(() => {
+    vi.spyOn(teamsApi, "tournamentInvitations").mockResolvedValue([]);
     vi.spyOn(teamsApi, "get").mockResolvedValue(team());
     vi.spyOn(teamsApi, "update").mockResolvedValue(team({ name: "Updated" }));
     vi.spyOn(teamsApi, "acceptInvitation").mockResolvedValue(team({ athleteMembershipStatus: "ACTIVE" }));
@@ -23,6 +24,8 @@ describe("TeamDetailScreen", () => {
     vi.spyOn(teamsApi, "cancelInvitation").mockResolvedValue(team());
     vi.spyOn(teamsApi, "removeAthlete").mockResolvedValue(team());
     vi.spyOn(teamsApi, "transferOwnership").mockResolvedValue(team({ administrationRole: "TEAM_ADMIN" }));
+    vi.spyOn(teamsApi, "listRegistrations").mockResolvedValue([]);
+    vi.spyOn(teamsApi, "cancelRegistration").mockResolvedValue(registration({ status: "CANCELLED" }));
   });
 
   afterEach(() => {
@@ -67,6 +70,20 @@ describe("TeamDetailScreen", () => {
     await waitFor(() => expect(teamsApi.acceptInvitation).toHaveBeenCalled());
   });
 
+  it("lists registrations and lets admins cancel draft entries", async () => {
+    vi.mocked(teamsApi.listRegistrations).mockResolvedValue([registration()]);
+
+    renderWithClient(<TeamDetailScreen teamId="team-1" />);
+
+    expect(await screen.findByRole("heading", { name: /inscrições do time/i })).toBeInTheDocument();
+    expect(await screen.findByText(/copa squadra/i)).toBeInTheDocument();
+    expect(screen.getByText(/iniciante · rascunho/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /cancelar inscrição/i }));
+
+    await waitFor(() => expect(teamsApi.cancelRegistration).toHaveBeenCalledWith(expect.anything(), "team-1", "reg-1"));
+  });
+
   function renderWithClient(children: React.ReactElement) {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
     render(<QueryClientProvider client={client}>{children}</QueryClientProvider>);
@@ -90,6 +107,22 @@ describe("TeamDetailScreen", () => {
         { userId: "athlete-1", email: "athlete@test", status: "ACTIVE" },
         { userId: "athlete-2", email: "invite@test", status: "INVITED" },
       ],
+      createdAt: "2026-08-29T10:00:00Z",
+      updatedAt: "2026-08-29T10:00:00Z",
+      ...overrides,
+    };
+  }
+
+  function registration(overrides = {}) {
+    return {
+      id: "reg-1",
+      teamId: "team-1",
+      teamName: "Liga Miga",
+      tournamentId: "tour-1",
+      tournamentName: "Copa Squadra",
+      categoryId: "cat-1",
+      categoryName: "Iniciante",
+      status: "DRAFT" as const,
       createdAt: "2026-08-29T10:00:00Z",
       updatedAt: "2026-08-29T10:00:00Z",
       ...overrides,

@@ -7,9 +7,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useAuth } from "@/features/auth/auth-context";
 import { tournamentsApi, type TournamentInput, type TournamentSummary } from "./api";
+import { TournamentDiscovery } from "./tournament-discovery";
 import { TournamentShell } from "./tournament-shell";
 
 const tournamentSchema = z.object({
+  visibility: z.enum(["PUBLIC", "PRIVATE"]),
   name: z.string().trim().min(3, "Use pelo menos 3 caracteres.").max(120, "Use no máximo 120 caracteres."),
   description: z.string().trim().max(1000, "Use no máximo 1000 caracteres.").optional(),
   city: z.string().trim().min(2, "Use pelo menos 2 caracteres.").max(80, "Use no máximo 80 caracteres."),
@@ -25,6 +27,7 @@ const tournamentSchema = z.object({
 type TournamentFormValues = z.infer<typeof tournamentSchema>;
 
 const emptyTournament: TournamentFormValues = {
+  visibility: "PUBLIC",
   name: "",
   description: "",
   city: "",
@@ -94,6 +97,7 @@ export function TournamentListScreen() {
 
         <form className="tournament-create-panel" onSubmit={submit} noValidate>
           <div><p className="eyebrow">Criar torneio</p><h2>Novo torneio</h2></div>
+          <Field label="Visibilidade"><select {...form.register("visibility")}><option value="PUBLIC">Público</option><option value="PRIVATE">Privado</option></select></Field>
           <Field label="Nome do torneio" error={form.formState.errors.name?.message}><input {...form.register("name")} /></Field>
           <div className="field-grid">
             <Field label="Cidade" error={form.formState.errors.city?.message}><input {...form.register("city")} /></Field>
@@ -112,6 +116,7 @@ export function TournamentListScreen() {
           <button disabled={createTournament.isPending}>{createTournament.isPending ? "Criando..." : "Criar rascunho"}</button>
         </form>
       </section>
+      <TournamentDiscovery />
     </TournamentShell>
   );
 }
@@ -134,48 +139,10 @@ function TournamentCard({ tournament, index }: Readonly<{ tournament: Tournament
 }
 
 function AthleteTournamentList() {
-  return (
-    <TournamentShell>
-      <header className="tournament-hero athlete-tournament-hero">
-        <div>
-          <p className="eyebrow">Inscritos</p>
-          <h1>Torneios & Campeonatos</h1>
-          <p>Acompanhe seus torneios atuais, jogos da categoria e inscrições abertas na comunidade.</p>
-        </div>
-        <div className="tournament-stat"><strong>2</strong><span>torneios atuais</span></div>
-      </header>
-
-      <section className="athlete-tournament-board" aria-label="Torneios da atleta">
-        <div className="section-heading"><p className="eyebrow">Seus Torneios Atuais</p><h2>Próximos desafios</h2></div>
-        <Link className="athlete-featured-tournament" href="/tournaments">
-          <span className="status-pill open">Em andamento</span>
-          <h3>Copa Delas SP 2024</h3>
-          <p>Seu Time: Metro Valkyries · Categoria: Intermediário</p>
-          <div className="tournament-metrics">
-            <span><strong>Hoje</strong> semifinal às 18:30</span>
-            <span><strong>Grupo B</strong> 2º lugar</span>
-          </div>
-          <span className="secondary-link">Calendário da Categoria</span>
-        </Link>
-
-        <article className="athlete-compact-tournament">
-          <span className="status-pill open">Inscrição Confirmada</span>
-          <h3>Liga Miga Verão 2024</h3>
-          <p>Categoria: Iniciante · Camisa titular: Branco</p>
-          <div className="badge-row"><span>Equipes Inscritas: 8</span><span>Jogos Terças e Quintas</span></div>
-        </article>
-      </section>
-
-      <section className="tournament-discovery" aria-label="Descobrir torneios">
-        <div className="section-heading"><p className="eyebrow">Inscrições Abertas</p><h2>Descubra Novos Torneios</h2></div>
-        <div className="tournament-discovery-grid">
-          <article><span>Society</span><h3>Super Copa Paulista Society</h3><p>Inscrição até 01/10 · Categorias Livre e Master.</p></article>
-          <article><span>Várzea</span><h3>Torneio Rainhas da Várzea</h3><p>Jogos aos sábados, formato eliminatório e premiação coletiva.</p></article>
-          <article><span>Futsal</span><h3>Copa Primavera 2024</h3><p>Categoria Intermediário com grupos regionais.</p></article>
-        </div>
-      </section>
-    </TournamentShell>
-  );
+  return <TournamentShell>
+    <header className="tournament-hero athlete-tournament-hero"><div><p className="eyebrow">Comunidade Squadra</p><h1>Torneios & Campeonatos</h1><p>Encontre o próximo desafio do seu time.</p></div></header>
+    <TournamentDiscovery />
+  </TournamentShell>;
 }
 
 function MetricCard({ value, label: metricLabel }: Readonly<{ value: string | number; label: string }>) {

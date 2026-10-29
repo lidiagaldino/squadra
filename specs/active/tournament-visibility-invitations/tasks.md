@@ -131,7 +131,7 @@ T5 -> T6 -> T7 -> T8
 
 ### T7: Add public and private UI workflows
 
-**Status**: Pending
+**Status**: Complete
 
 **What**: Add visibility control, authenticated public discovery, private owner invitations, and team invitation inbox/decision actions.
 **Where**: `frontend/src/features/tournaments/`; `frontend/src/features/teams/`
