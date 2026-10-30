@@ -6,13 +6,13 @@ Tournament owners need to choose whether teams can request a category registrati
 
 ## Goals
 
-- [ ] An organizer can set a tournament to `PUBLIC` or `PRIVATE` when creating or editing a draft.
-- [ ] Signed in team admins can discover public open tournaments and request category registration.
-- [ ] Only a private tournament's owner can invite a team into a specific category.
-- [ ] A team's owner or admin can accept or reject its pending invitation.
-- [ ] Accepting an invitation creates a category registration; rejecting creates none.
-- [ ] Private tournament and invitation data remain scoped to the owner and invited team's admins.
-- [ ] UI copy and state labels are in Brazilian Portuguese.
+- [x] An organizer can set a tournament to `PUBLIC` or `PRIVATE` when creating or editing a draft.
+- [x] Signed in team admins can discover public open tournaments and request category registration.
+- [x] Only a private tournament's owner can invite a team into a specific category.
+- [x] A team's owner or admin can accept or reject its pending invitation.
+- [x] Accepting an invitation creates a category registration; rejecting creates none.
+- [x] Private tournament and invitation data remain scoped to the owner and invited team's admins.
+- [x] UI copy and state labels are in Brazilian Portuguese.
 
 ## Out of Scope
 
@@ -141,17 +141,17 @@ Tournament owners need to choose whether teams can request a category registrati
 | ID | Requirement | Story | Priority | Status |
 | --- | --- | --- | --- | --- |
 | TVIS-01 | Persist and expose visibility | Configure Tournament Visibility | P1 | Verified |
-| TVIS-02 | Discover and register in public categories | Request Registration in a Public Tournament | P1 | Pending |
-| TVIS-03 | Owner team search and private invitations | Invite a Team to a Private Category | P1 | Implemented |
-| TVIS-04 | Team invitation decisions and capacity integrity | Respond to an Invitation | P1 | Implemented |
-| TVIS-05 | Private access and Portuguese UI | Private Access and Portuguese UI | P1 | Pending |
+| TVIS-02 | Discover and register in public categories | Request Registration in a Public Tournament | P1 | Verified |
+| TVIS-03 | Owner team search and private invitations | Invite a Team to a Private Category | P1 | Verified |
+| TVIS-04 | Team invitation decisions and capacity integrity | Respond to an Invitation | P1 | Verified |
+| TVIS-05 | Private access and Portuguese UI | Private Access and Portuguese UI | P1 | Verified |
 
 **Coverage:** 5 total, 5 mapped to tasks, 0 unmapped.
 
 ## Success Criteria
 
-- [ ] Owner can create a public or private tournament and cannot change visibility after publish.
-- [ ] Public open tournaments are discoverable to signed in team admins; private ones are not.
-- [ ] Only owner can invite; only team admins can accept or reject.
-- [ ] Accepted invitation creates exactly one registration within category capacity.
-- [ ] Backend and frontend quality gates pass with existing coverage thresholds.
+- [x] Owner can create a public or private tournament and cannot change visibility after publish.
+- [x] Public open tournaments are discoverable to signed in team admins; private ones are not.
+- [x] Only owner can invite; only team admins can accept or reject.
+- [x] Accepted invitation creates exactly one registration within category capacity.
+- [x] Backend and frontend quality gates pass with existing coverage thresholds.

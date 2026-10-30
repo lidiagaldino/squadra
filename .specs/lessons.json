@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "promote_threshold": 2,
+  "window_days": 45,
+  "quarantine_threshold": 2,
+  "next_id": 3,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "ac_gap::recheck active registration under the category lock in the same transaction that inserts a tournament invitation",
+      "text": "Recheck active registration under the category lock in the same transaction that inserts a tournament invitation.",
+      "signal": "ac_gap",
+      "scope": "infra/db",
+      "status": "candidate",
+      "features": [
+        "tournament-visibility-invitations"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "specs/active/tournament-visibility-invitations/validation.md:48 (infra/db)"
+      ],
+      "created": "2026-10-30T15:28:19Z",
+      "last_seen": "2026-10-30T15:28:19Z"
+    },
+    {
+      "id": "L-002",
+      "key": "ac_gap::assert persisted participation state and absence of unintended writes after rejected retried or competing requests",
+      "text": "Assert persisted participation state and absence of unintended writes after rejected, retried, or competing requests.",
+      "signal": "ac_gap",
+      "scope": "tournament-tests",
+      "status": "candidate",
+      "features": [
+        "tournament-visibility-invitations"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "specs/active/tournament-visibility-invitations/validation.md:46 (tournament-tests)"
+      ],
+      "created": "2026-10-30T15:28:19Z",
+      "last_seen": "2026-10-30T15:28:19Z"
+    }
+  ]
+}

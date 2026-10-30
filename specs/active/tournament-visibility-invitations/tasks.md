@@ -6,7 +6,7 @@ Use `tlc-spec-driven` and the Squadra Specialist Agent after approval. Each task
 
 **Spec**: `specs/active/tournament-visibility-invitations/spec.md`
 **Design**: `specs/active/tournament-visibility-invitations/design.md`
-**Status**: In Progress
+**Status**: Complete
 
 ## Test Coverage Matrix
 
@@ -144,7 +144,7 @@ T5 -> T6 -> T7 -> T8
 
 ### T8: Validate migrations and feature contracts
 
-**Status**: Pending
+**Status**: Complete
 
 **What**: Run full gates, inspect API/security/DB compatibility, update relevant business docs, and record independent spec-anchored verification.
 **Where**: `specs/active/tournament-visibility-invitations/`; `docs/`
@@ -170,3 +170,14 @@ team inbox isolation, TEAM_ADMIN decisions, visibility persistence, and competin
 invitation decisions. Regression tests cover those outcomes. Creation now repeats
 the active-registration guard while holding the category lock, preventing stale
 service checks during concurrent acceptance.
+
+## Final gates (2026-10-30)
+
+- Clean backend verification: 127 tests, zero failures/errors/skips; 95.36% line coverage.
+- PostgreSQL 17 verification: 127 tests, zero failures/errors/skips.
+- Frontend: 129 tests, lint/typecheck/build passed; 93.8% line and 83.21% branch coverage.
+- Independent verifier: PASS, 32/32 acceptance criteria; two behavioral mutants killed.
+- Migration regression: V8 data upgraded through V12, preserving registrations and backfilling PUBLIC.
+- Local k6 smoke: 3 VUs, 10 seconds, 0% request failures, p95 3.46 ms.
+- Evidence: `validation.md`; performance recipe: `k6/smoke/README.md` (repository-relative).
+- Business documentation updated in `docs/tournaments-and-registrations.md`.
